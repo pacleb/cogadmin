@@ -3,14 +3,8 @@ import { ConcernBoard } from "../components/ConcernBoard";
 import "./ConcernsPage.css";
 
 export function ConcernsPage() {
-  const {
-    concerns,
-    loading,
-    addConcern,
-    updateConcern,
-    deleteConcern,
-    updateConcernStatus,
-  } = useConcerns();
+  const { concerns, loading, addConcern, updateConcern, deleteConcern } =
+    useConcerns();
 
   if (loading) {
     return (

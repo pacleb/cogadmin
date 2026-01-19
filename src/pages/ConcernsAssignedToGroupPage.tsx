@@ -3,14 +3,8 @@ import { ConcernBoard } from "../components/ConcernBoard";
 import "./ConcernsPage.css";
 
 export function ConcernsAssignedToGroupPage() {
-  const {
-    concerns,
-    loading,
-    addConcern,
-    updateConcern,
-    deleteConcern,
-    updateConcernStatus,
-  } = useConcerns();
+  const { concerns, loading, addConcern, updateConcern, deleteConcern } =
+    useConcerns();
 
   // TODO: Filter concerns assigned to current user's group once assignment field is added
   const assignedToGroup = concerns;

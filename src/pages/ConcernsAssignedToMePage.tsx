@@ -3,14 +3,8 @@ import { ConcernBoard } from "../components/ConcernBoard";
 import "./ConcernsPage.css";
 
 export function ConcernsAssignedToMePage() {
-  const {
-    concerns,
-    loading,
-    addConcern,
-    updateConcern,
-    deleteConcern,
-    updateConcernStatus,
-  } = useConcerns();
+  const { concerns, loading, addConcern, updateConcern, deleteConcern } =
+    useConcerns();
 
   // TODO: Filter concerns assigned to current user once assignment field is added
   const assignedToMe = concerns;
