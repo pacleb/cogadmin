@@ -192,12 +192,12 @@ export const Icons = {
       viewBox="0 0 18 18"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="9" y1="3" x2="9" y2="15" />
-      <line x1="3" y1="9" x2="15" y2="9" />
+      <line x1="9" y1="4" x2="9" y2="14" />
+      <line x1="4" y1="9" x2="14" y2="9" />
     </svg>
   ),
   close: (

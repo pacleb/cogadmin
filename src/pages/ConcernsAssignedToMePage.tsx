@@ -29,7 +29,7 @@ export function ConcernsAssignedToMePage() {
         onAddConcern={addConcern}
         onUpdateConcern={updateConcern}
         onDeleteConcern={deleteConcern}
-        title="Assigned to Me"
+        title={`Assigned to Me (${assignedToMe.length})`}
       />
     </div>
   );

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useProfile } from "../hooks/useProfile";
+import { useConcerns } from "../hooks/useConcernsSupabase";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -156,6 +157,7 @@ const Icons = {
 export function Sidebar({ onCollapsedChange }: SidebarProps) {
   const { user, signOut } = useAuth();
   const { profile } = useProfile();
+  const { concerns } = useConcerns();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
@@ -164,6 +166,14 @@ export function Sidebar({ onCollapsedChange }: SidebarProps) {
   // Check if user has admin access
   const isAdminUser =
     profile?.roleName === "Admin Head" || profile?.roleName === "System Admin";
+
+  // Calculate concern counts
+  const assignedToMeCount = concerns.filter(
+    (concern) => concern.pic === profile?.nickname,
+  ).length;
+  const assignedToGroupCount = concerns.filter(
+    (concern) => concern.groupCode === profile?.groupCode,
+  ).length;
 
   // Notify parent when collapsed state changes
   useEffect(() => {
@@ -244,7 +254,9 @@ export function Sidebar({ onCollapsedChange }: SidebarProps) {
                 `nav-item nav-sub ${isActive ? "active" : ""}`
               }
             >
-              <span className="nav-label">Assigned to Me</span>
+              <span className="nav-label">
+                Assigned to Me ({assignedToMeCount})
+              </span>
             </NavLink>
             <NavLink
               to="/concerns/assigned-to-group"
@@ -252,7 +264,9 @@ export function Sidebar({ onCollapsedChange }: SidebarProps) {
                 `nav-item nav-sub ${isActive ? "active" : ""}`
               }
             >
-              <span className="nav-label">Assigned to My Group</span>
+              <span className="nav-label">
+                To My Group ({assignedToGroupCount})
+              </span>
             </NavLink>
           </div>
         )}

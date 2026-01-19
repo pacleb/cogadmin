@@ -29,7 +29,7 @@ export function ConcernsAssignedToGroupPage() {
         onAddConcern={addConcern}
         onUpdateConcern={updateConcern}
         onDeleteConcern={deleteConcern}
-        title="Assigned to My Group"
+        title={`Assigned to My Group (${assignedToGroup.length})`}
       />
     </div>
   );
