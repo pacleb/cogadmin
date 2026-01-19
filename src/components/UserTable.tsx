@@ -171,6 +171,7 @@ export function UserTable({
   const startEditing = (user: UserProfile) => {
     setEditingId(user.id);
     setFormData({
+      email: user.email,
       name: user.name,
       nickname: user.nickname,
       mobile: user.mobile,
@@ -396,7 +397,18 @@ export function UserTable({
               <tr key={user.id}>
                 {editingId === user.id ? (
                   <>
-                    <td className="email-cell">{user.email}</td>
+                    <td>
+                      <input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                        placeholder="Email"
+                        required
+                        autoFocus
+                      />
+                    </td>
                     <td>
                       <input
                         type="text"
@@ -405,7 +417,6 @@ export function UserTable({
                           setFormData({ ...formData, name: e.target.value })
                         }
                         placeholder="Name"
-                        autoFocus
                       />
                     </td>
                     <td>

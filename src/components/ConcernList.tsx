@@ -119,7 +119,8 @@ export function ConcernList({
           <tr>
             <th>G</th>
             <th>Urgency</th>
-            <th>Task</th>
+            <th>Concern</th>
+            <th>Remarks</th>
             <th>PIC</th>
             <th>Status</th>
             <th>Detailed Status</th>
@@ -132,6 +133,8 @@ export function ConcernList({
             <tr
               key={concern.id}
               className={`concern-row urgency-${concern.urgency.toLowerCase().replace(" ", "-")}`}
+              onClick={() => setEditingId(concern.id)}
+              style={{ cursor: "pointer" }}
             >
               <td className="group-cell">
                 <span className="group-badge">{concern.groupCode}</span>
@@ -144,6 +147,7 @@ export function ConcernList({
                 </span>
               </td>
               <td className="task-cell">{concern.task}</td>
+              <td className="remarks-cell">{concern.remarks || "-"}</td>
               <td className="pic-cell">{concern.pic || "-"}</td>
               <td className="status-cell">
                 <span className="status-badge">{concern.status}</span>

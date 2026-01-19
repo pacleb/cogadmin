@@ -27,13 +27,14 @@
   font-size: 0.75rem;
 }
 
-/* Center align headers for Group, PIC, Status, Detailed Status, Start Date, End Date */
+/* Center align headers for Group, Urgency, PIC, Status, Detailed Status, Start Date, End Date */
 .concern-table th:nth-child(1),
-.concern-table th:nth-child(4),
+.concern-table th:nth-child(2),
 .concern-table th:nth-child(5),
 .concern-table th:nth-child(6),
 .concern-table th:nth-child(7),
-.concern-table th:nth-child(8) {
+.concern-table th:nth-child(8),
+.concern-table th:nth-child(9) {
   text-align: center;
 }
 
@@ -52,19 +53,20 @@
 }
 
 .group-cell {
-  font-weight: 500;
   text-align: center;
 }
 
 .group-badge {
   display: inline-block;
   padding: 0.2rem 0.4rem;
-  font-size: 0.7rem;
-  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 
 .urgency-cell {
   white-space: nowrap;
+  text-align: center;
 }
 
 .urgency-badge {
@@ -107,8 +109,20 @@
   white-space: nowrap;
 }
 
+.remarks-cell {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
 .pic-cell {
   color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 400;
   text-align: center;
 }
 
@@ -120,19 +134,22 @@
 .status-badge {
   display: inline-block;
   padding: 0.2rem 0.4rem;
-  font-size: 0.7rem;
-  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 
 .detailed-status-cell {
   color: #6b7280;
   font-size: 0.75rem;
+  font-weight: 400;
   text-align: center;
 }
 
 .date-cell {
   color: #6b7280;
   font-size: 0.75rem;
+  font-weight: 400;
   white-space: nowrap;
   text-align: center;
 }

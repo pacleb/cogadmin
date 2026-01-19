@@ -57,7 +57,11 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<DashboardPage />} />
+        <Route
+          path="/"
+          element={<Navigate to="/concerns/assigned-to-me" replace />}
+        />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route
           path="/concerns"
           element={<Navigate to="/concerns/assigned-to-me" replace />}
