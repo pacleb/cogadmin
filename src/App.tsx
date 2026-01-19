@@ -5,7 +5,8 @@ import { AuthPage } from "./pages/AuthPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConcernsPage } from "./pages/ConcernsPage";
 import { ReportsPage } from "./pages/ReportsPage";
-import { SettingsPage } from "./pages/SettingsPage";
+import { AccountPage } from "./pages/AccountPage";
+import { GroupsPage } from "./pages/GroupsPage";
 import "./App.css";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -55,7 +56,12 @@ function AppRoutes() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/concerns" element={<ConcernsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route
+          path="/settings"
+          element={<Navigate to="/settings/account" replace />}
+        />
+        <Route path="/settings/account" element={<AccountPage />} />
+        <Route path="/settings/groups" element={<GroupsPage />} />
       </Route>
     </Routes>
   );

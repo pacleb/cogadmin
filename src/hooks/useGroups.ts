@@ -30,7 +30,6 @@ export function useGroups() {
       const { data, error } = await supabase
         .from('groups')
         .select('*')
-        .eq('user_id', user.id)
         .order('code', { ascending: true });
 
       if (error) throw error;
@@ -55,7 +54,6 @@ export function useGroups() {
 
       try {
         const { error } = await supabase.from('groups').insert({
-          user_id: user.id,
           code: group.code,
           name: group.name,
         });
@@ -83,8 +81,7 @@ export function useGroups() {
             ...(updates.name && { name: updates.name }),
             updated_at: new Date().toISOString(),
           })
-          .eq('id', id)
-          .eq('user_id', user.id);
+          .eq('id', id);
 
         if (error) throw error;
         await fetchGroups();
@@ -105,8 +102,7 @@ export function useGroups() {
         const { error } = await supabase
           .from('groups')
           .delete()
-          .eq('id', id)
-          .eq('user_id', user.id);
+          .eq('id', id);
 
         if (error) throw error;
         await fetchGroups();
