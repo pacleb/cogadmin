@@ -130,20 +130,22 @@ export function useConcerns() {
         
         // Auto-reassign PIC to Admin Head for specific statuses
         if (updates.status && ['New', 'For Delegating', 'For Download', 'For Update', 'For Report', 'For Approval'].includes(updates.status)) {
-          const { data: adminHead } = await supabase
-            .from('profiles')
-            .select('nickname')
-            .eq('role_id', (
-              await supabase
-                .from('roles')
-                .select('id')
-                .eq('name', 'Admin Head')
-                .single()
-            ).data?.id)
+          const roleResult = await supabase
+            .from('roles')
+            .select('id')
+            .eq('name', 'Admin Head')
             .single();
           
-          if (adminHead?.nickname) {
-            updateData.pic = adminHead.nickname;
+          if (roleResult.data?.id) {
+            const { data: adminHead } = await supabase
+              .from('profiles')
+              .select('nickname')
+              .eq('role_id', roleResult.data.id)
+              .single();
+            
+            if (adminHead?.nickname) {
+              updateData.pic = adminHead.nickname;
+            }
           }
         }
         
