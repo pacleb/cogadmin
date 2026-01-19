@@ -15,8 +15,7 @@ interface ConcernBoardProps {
     id: string,
     updates: Partial<Omit<Concern, "id" | "createdAt">>,
   ) => void;
-  onDeleteConcern: (id: string) => void;
-  onStatusChange: (id: string, status: ConcernStatus) => void;
+  onDeleteConcern?: (id: string) => void;
   title?: string;
   subtitle?: string;
 }
@@ -28,7 +27,6 @@ export function ConcernBoard({
   onAddConcern,
   onUpdateConcern,
   onDeleteConcern,
-  onStatusChange,
   title = "Admin Concerns",
   subtitle,
 }: ConcernBoardProps) {
@@ -105,7 +103,11 @@ export function ConcernBoard({
         </span>
       </div>
 
-      <ConcernList concerns={filteredConcerns} onUpdate={onUpdateConcern} />
+      <ConcernList
+        concerns={filteredConcerns}
+        onUpdate={onUpdateConcern}
+        onDelete={onDeleteConcern}
+      />
     </div>
   );
 }
