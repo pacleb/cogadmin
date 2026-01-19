@@ -268,6 +268,18 @@ export function Sidebar({ onCollapsedChange }: SidebarProps) {
                 To My Group ({assignedToGroupCount})
               </span>
             </NavLink>
+            {isAdminUser && (
+              <NavLink
+                to="/concerns/all"
+                className={({ isActive }) =>
+                  `nav-item nav-sub ${isActive ? "active" : ""}`
+                }
+              >
+                <span className="nav-label">
+                  All Concerns ({concerns.length})
+                </span>
+              </NavLink>
+            )}
           </div>
         )}
       </div>

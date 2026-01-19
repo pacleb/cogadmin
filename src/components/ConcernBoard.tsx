@@ -18,6 +18,7 @@ interface ConcernBoardProps {
   onDeleteConcern?: (id: string) => void;
   title?: string;
   subtitle?: string;
+  filterType?: "status" | "group";
 }
 
 type FilterStatus = ConcernStatus | "all";
@@ -29,9 +30,16 @@ export function ConcernBoard({
   onDeleteConcern,
   title = "Admin Concerns",
   subtitle,
+  filterType = "status",
 }: ConcernBoardProps) {
   const [showForm, setShowForm] = useState(false);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+  const [filterGroup, setFilterGroup] = useState<string>("all");
+
+  // Get unique groups from concerns
+  const uniqueGroups = Array.from(
+    new Set(concerns.map((c) => c.groupCode)),
+  ).sort();
 
   const handleAddConcern = (
     concern: Omit<Concern, "id" | "createdAt" | "updatedAt" | "endDate">,
@@ -41,9 +49,13 @@ export function ConcernBoard({
   };
 
   const filteredConcerns =
-    filterStatus === "all"
-      ? concerns
-      : concerns.filter((concern) => concern.status === filterStatus);
+    filterType === "group"
+      ? filterGroup === "all"
+        ? concerns
+        : concerns.filter((concern) => concern.groupCode === filterGroup)
+      : filterStatus === "all"
+        ? concerns
+        : concerns.filter((concern) => concern.status === filterStatus);
 
   return (
     <div className="concern-board">
@@ -84,19 +96,39 @@ export function ConcernBoard({
 
       <div className="filter-bar">
         <div className="filter-group">
-          <label htmlFor="status-filter">Filter by status:</label>
-          <select
-            id="status-filter"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
-          >
-            <option value="all">All Concerns</option>
-            {STATUS_OPTIONS.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
+          {filterType === "group" ? (
+            <>
+              <label htmlFor="group-filter">Filter by group:</label>
+              <select
+                id="group-filter"
+                value={filterGroup}
+                onChange={(e) => setFilterGroup(e.target.value)}
+              >
+                <option value="all">All Groups</option>
+                {uniqueGroups.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
+            </>
+          ) : (
+            <>
+              <label htmlFor="status-filter">Filter by status:</label>
+              <select
+                id="status-filter"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+              >
+                <option value="all">All Concerns</option>
+                {STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
         </div>
         <span className="concern-count-info">
           Showing {filteredConcerns.length} of {concerns.length} concerns

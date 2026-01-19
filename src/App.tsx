@@ -5,6 +5,7 @@ import { AuthPage } from "./pages/AuthPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConcernsAssignedToMePage } from "./pages/ConcernsAssignedToMePage";
 import { ConcernsAssignedToGroupPage } from "./pages/ConcernsAssignedToGroupPage";
+import { AllConcernsPage } from "./pages/AllConcernsPage";
 import { ReportsPage } from "./pages/ReportsPage";
 import { AccountPage } from "./pages/AccountPage";
 import { GroupsPage } from "./pages/GroupsPage";
@@ -73,6 +74,7 @@ function AppRoutes() {
           path="/concerns/assigned-to-group"
           element={<ConcernsAssignedToGroupPage />}
         />
+        <Route path="/concerns/all" element={<AllConcernsPage />} />
         <Route path="/reports" element={<ReportsPage />} />
         <Route
           path="/settings"
