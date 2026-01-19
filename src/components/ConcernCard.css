@@ -59,12 +59,41 @@
 .urgency-badge {
   font-size: 0.625rem;
   font-weight: 600;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  color: #ffffff;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+/* EMERGENCY: Dark Gray background, White font */
+.urgency-badge-emergency {
+  background: #374151;
+  color: #ffffff;
+}
+
+/* Major Urgent: Dark Red background, White font */
+.urgency-badge-major-urgent {
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+/* Urgent: Light Orange background, Dark Red font */
+.urgency-badge-urgent {
+  background: #fed7aa;
+  color: #b91c1c;
+}
+
+/* Major: Light Blue background, Dark Blue font */
+.urgency-badge-major {
+  background: #bfdbfe;
+  color: #1e40af;
+}
+
+/* Normal: Light Gray background, Dark Gray font */
+.urgency-badge-normal {
+  background: #e5e7eb;
+  color: #374151;
 }
 
 .concern-task {

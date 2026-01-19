@@ -1,8 +1,35 @@
 import { useState, useEffect } from "react";
 import type { Concern, ConcernUrgency, ConcernStatus } from "../types/Concern";
-import { URGENCY_OPTIONS, STATUS_OPTIONS } from "../types/Concern";
+import {
+  URGENCY_OPTIONS,
+  URGENCY_LABELS,
+  STATUS_OPTIONS,
+} from "../types/Concern";
 import { supabase } from "../lib/supabase";
+import { DateTimePicker } from "./DateTimePicker";
 import "./ConcernForm.css";
+
+// Detailed status options based on status
+const DETAILED_STATUS_OPTIONS: Record<string, string[]> = {
+  Preparing: [
+    "Pending",
+    "For Starting",
+    "For Designing",
+    "For Canvassing",
+    "For Quotation",
+    "For Demo",
+    "Delayed",
+    "For Presentation",
+  ],
+  Ongoing: [
+    "Pending",
+    "For Starting",
+    "In Progress",
+    "Delayed",
+    "For Problem Solving",
+    "For Finishing",
+  ],
+};
 
 interface Group {
   code: string;
@@ -47,6 +74,17 @@ export function ConcernForm({
   );
   const [pic, setPic] = useState(initialValues?.pic ?? "");
 
+  // Check if detailed status is required
+  const requiresDetailedStatus = status === "Preparing" || status === "Ongoing";
+  const detailedStatusOptions = DETAILED_STATUS_OPTIONS[status] || [];
+
+  // Clear detailed status when status changes to one that doesn't need it
+  useEffect(() => {
+    if (!requiresDetailedStatus) {
+      setDetailedStatus("");
+    }
+  }, [status, requiresDetailedStatus]);
+
   // Fetch groups and profiles for dropdowns
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +111,7 @@ export function ConcernForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!task.trim() || !groupCode) return;
+    if (requiresDetailedStatus && !detailedStatus) return;
 
     onSubmit({
       groupCode,
@@ -99,6 +138,22 @@ export function ConcernForm({
 
   return (
     <form className="concern-form" onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label>Urgency</label>
+        <div className="urgency-toggle-group">
+          {URGENCY_OPTIONS.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              className={`urgency-toggle ${opt === urgency ? "active" : ""} urgency-${opt.toLowerCase().replace(" ", "-")}`}
+              onClick={() => setUrgency(opt)}
+            >
+              {URGENCY_LABELS[opt]}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="form-row">
         <div className="form-group">
           <label htmlFor="groupCode">Group *</label>
@@ -118,15 +173,12 @@ export function ConcernForm({
         </div>
 
         <div className="form-group">
-          <label htmlFor="urgency">Urgency</label>
-          <select
-            id="urgency"
-            value={urgency}
-            onChange={(e) => setUrgency(e.target.value as ConcernUrgency)}
-          >
-            {URGENCY_OPTIONS.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
+          <label htmlFor="pic">PIC (Person in Charge)</label>
+          <select id="pic" value={pic} onChange={(e) => setPic(e.target.value)}>
+            <option value="">Select PIC</option>
+            {profiles.map((profile) => (
+              <option key={profile.nickname} value={profile.nickname}>
+                {profile.nickname}
               </option>
             ))}
           </select>
@@ -146,30 +198,6 @@ export function ConcernForm({
           maxLength={100}
           required
         />
-      </div>
-
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="startDate">Start Date</label>
-          <input
-            id="startDate"
-            type="datetime-local"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="pic">PIC (Person in Charge)</label>
-          <select id="pic" value={pic} onChange={(e) => setPic(e.target.value)}>
-            <option value="">Select PIC</option>
-            {profiles.map((profile) => (
-              <option key={profile.nickname} value={profile.nickname}>
-                {profile.nickname}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
 
       <div className="form-group">
@@ -200,13 +228,53 @@ export function ConcernForm({
         </div>
 
         <div className="form-group">
-          <label htmlFor="detailedStatus">Detailed Status</label>
-          <input
-            id="detailedStatus"
-            type="text"
-            value={detailedStatus}
-            onChange={(e) => setDetailedStatus(e.target.value)}
-            placeholder="Enter detailed status..."
+          <label htmlFor="detailedStatus">
+            Detailed Status{requiresDetailedStatus && " *"}
+          </label>
+          {requiresDetailedStatus ? (
+            <select
+              id="detailedStatus"
+              value={detailedStatus}
+              onChange={(e) => setDetailedStatus(e.target.value)}
+              required
+            >
+              <option value="">Select Detailed Status</option>
+              {detailedStatusOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              id="detailedStatus"
+              type="text"
+              value={detailedStatus}
+              disabled
+              placeholder="N/A"
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="startDate">Start Date</label>
+          <DateTimePicker
+            id="startDate"
+            value={startDate}
+            onChange={setStartDate}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="endDate">End Date</label>
+          <DateTimePicker
+            id="endDate"
+            value=""
+            onChange={() => {}}
+            disabled
+            placeholder="Auto-set when completed"
           />
         </div>
       </div>

@@ -39,6 +39,14 @@ export const URGENCY_OPTIONS: ConcernUrgency[] = [
   'Normal',
 ];
 
+export const URGENCY_LABELS: Record<ConcernUrgency, string> = {
+  'EMERGENCY': '⚠️ EMERGENCY ⚠️',
+  'Major Urgent': 'Major Urgent',
+  'Urgent': 'Urgent',
+  'Major': 'Major',
+  'Normal': 'Normal',
+};
+
 export const STATUS_OPTIONS: ConcernStatus[] = [
   'New',
   'For Delegating',

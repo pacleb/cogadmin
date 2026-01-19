@@ -107,3 +107,73 @@
     background: #2563eb;
   }
 }
+
+/* Urgency Toggle Buttons */
+.urgency-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.urgency-toggle {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #18181b;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #ffffff;
+  color: #18181b;
+}
+
+.urgency-toggle:hover {
+  background: #f4f4f5;
+}
+
+/* EMERGENCY: Dark Gray background, White font */
+.urgency-toggle.urgency-emergency.active {
+  background: #374151;
+  color: #ffffff;
+  border-color: #374151;
+}
+
+/* Major Urgent: Dark Red background, White font */
+.urgency-toggle.urgency-major-urgent.active {
+  background: #b91c1c;
+  color: #ffffff;
+  border-color: #b91c1c;
+}
+
+/* Urgent: Light Orange background, Dark Red font */
+.urgency-toggle.urgency-urgent.active {
+  background: #fed7aa;
+  color: #b91c1c;
+  border-color: #b91c1c;
+}
+
+/* Major: Light Blue background, Dark Blue font */
+.urgency-toggle.urgency-major.active {
+  background: #bfdbfe;
+  color: #1e40af;
+  border-color: #1e40af;
+}
+
+/* Normal: Light Gray background, Dark Gray font */
+.urgency-toggle.urgency-normal.active {
+  background: #e5e7eb;
+  color: #374151;
+  border-color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .urgency-toggle {
+    background: #27272a;
+    color: #fafafa;
+    border-color: #fafafa;
+  }
+
+  .urgency-toggle:hover {
+    background: #3f3f46;
+  }
+}

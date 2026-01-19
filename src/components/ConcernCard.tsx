@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { Concern, ConcernStatus } from "../types/Concern";
-import { STATUS_OPTIONS } from "../types/Concern";
+import { STATUS_OPTIONS, URGENCY_LABELS } from "../types/Concern";
 import { ConcernForm } from "./ConcernForm";
 import { Icons } from "./Icons";
+import { formatDateTime } from "../lib/formatDate";
 import "./ConcernCard.css";
 
 interface ConcernCardProps {
@@ -14,14 +15,6 @@ interface ConcernCardProps {
   onDelete: (id: string) => void;
   onStatusChange: (id: string, status: ConcernStatus) => void;
 }
-
-const urgencyColors: Record<string, string> = {
-  EMERGENCY: "#dc2626",
-  "Major Urgent": "#ea580c",
-  Urgent: "#f59e0b",
-  Major: "#3b82f6",
-  Normal: "#22c55e",
-};
 
 export function ConcernCard({
   concern,
@@ -57,10 +50,9 @@ export function ConcernCard({
       <div className="concern-header">
         <div className="concern-group-badge">{concern.groupCode}</div>
         <span
-          className="urgency-badge"
-          style={{ backgroundColor: urgencyColors[concern.urgency] }}
+          className={`urgency-badge urgency-badge-${concern.urgency.toLowerCase().replace(" ", "-")}`}
         >
-          {concern.urgency}
+          {URGENCY_LABELS[concern.urgency]}
         </span>
       </div>
 
@@ -72,11 +64,7 @@ export function ConcernCard({
         <div className="meta-row">
           <span className="meta-label">Start:</span>
           <span className="meta-value">
-            {concern.startDate.toLocaleDateString()}{" "}
-            {concern.startDate.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {formatDateTime(concern.startDate)}
           </span>
         </div>
         {concern.pic && (
@@ -95,11 +83,7 @@ export function ConcernCard({
           <div className="meta-row">
             <span className="meta-label">End:</span>
             <span className="meta-value">
-              {concern.endDate.toLocaleDateString()}{" "}
-              {concern.endDate.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {formatDateTime(concern.endDate)}
             </span>
           </div>
         )}
