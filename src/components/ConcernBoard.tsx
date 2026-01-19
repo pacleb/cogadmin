@@ -118,7 +118,9 @@ export function ConcernBoard({
               <select
                 id="status-filter"
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as FilterStatus)
+                }
               >
                 <option value="all">All Concerns</option>
                 {STATUS_OPTIONS.map((status) => (
