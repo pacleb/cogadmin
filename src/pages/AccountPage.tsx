@@ -1,8 +1,48 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useProfile } from "../hooks/useProfile";
 import "./SettingsPage.css";
+import "./AccountPage.css";
 
 export function AccountPage() {
   const { user } = useAuth();
+  const { profile, loading, saving, updateProfile } = useProfile();
+  const [formData, setFormData] = useState({
+    name: "",
+    nickname: "",
+    mobile: "",
+  });
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        name: profile.name,
+        nickname: profile.nickname,
+        mobile: profile.mobile,
+      });
+    }
+  }, [profile]);
+
+  const handleSave = async () => {
+    try {
+      await updateProfile(formData);
+      setIsEditing(false);
+    } catch {
+      // Error handled in hook
+    }
+  };
+
+  const handleCancel = () => {
+    if (profile) {
+      setFormData({
+        name: profile.name,
+        nickname: profile.nickname,
+        mobile: profile.mobile,
+      });
+    }
+    setIsEditing(false);
+  };
 
   return (
     <div className="settings-page">
@@ -12,17 +52,112 @@ export function AccountPage() {
       </header>
 
       <section className="settings-section">
-        <h2>Profile</h2>
-        <div className="settings-card">
-          <div className="setting-item">
-            <label>Email</label>
-            <span className="setting-value">{user?.email}</span>
-          </div>
-          <div className="setting-item">
-            <label>User ID</label>
-            <span className="setting-value setting-id">{user?.id}</span>
-          </div>
+        <div className="section-header">
+          <h2>Profile</h2>
+          {!isEditing && !loading && (
+            <button
+              className="btn-edit-profile"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+          )}
         </div>
+
+        {loading ? (
+          <div className="settings-card">
+            <div className="loading-message">Loading profile...</div>
+          </div>
+        ) : (
+          <div className="settings-card">
+            <div className="setting-item">
+              <label>Email</label>
+              <span className="setting-value setting-readonly">
+                {profile?.email || user?.email}
+              </span>
+            </div>
+
+            <div className="setting-item">
+              <label>Name</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  placeholder="Enter your name"
+                  className="setting-input"
+                />
+              ) : (
+                <span className="setting-value">{profile?.name || "—"}</span>
+              )}
+            </div>
+
+            <div className="setting-item">
+              <label>Nickname</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.nickname}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nickname: e.target.value })
+                  }
+                  placeholder="Enter your nickname"
+                  className="setting-input"
+                />
+              ) : (
+                <span className="setting-value">
+                  {profile?.nickname || "—"}
+                </span>
+              )}
+            </div>
+
+            <div className="setting-item">
+              <label>Mobile</label>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  value={formData.mobile}
+                  onChange={(e) =>
+                    setFormData({ ...formData, mobile: e.target.value })
+                  }
+                  placeholder="Enter your mobile number"
+                  className="setting-input"
+                />
+              ) : (
+                <span className="setting-value">{profile?.mobile || "—"}</span>
+              )}
+            </div>
+
+            <div className="setting-item">
+              <label>Role</label>
+              <span className="setting-value setting-readonly">
+                {profile?.roleName || "Not assigned"}
+              </span>
+            </div>
+
+            {isEditing && (
+              <div className="setting-actions">
+                <button
+                  className="btn-save-profile"
+                  onClick={handleSave}
+                  disabled={saving}
+                >
+                  {saving ? "Saving..." : "Save Changes"}
+                </button>
+                <button className="btn-cancel-profile" onClick={handleCancel}>
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            <div className="setting-item setting-item-muted">
+              <label>User ID</label>
+              <span className="setting-value setting-id">{user?.id}</span>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

@@ -84,12 +84,29 @@ const Icons = {
       <path d="M20 21a8 8 0 1 0-16 0" />
     </svg>
   ),
+  system: (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  ),
 };
 
 export function Sidebar() {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const isSettingsActive = location.pathname.startsWith("/settings");
+  const isSystemActive = location.pathname.startsWith("/system");
 
   return (
     <aside className="sidebar">
@@ -142,13 +159,46 @@ export function Sidebar() {
               >
                 <span className="nav-label">Account</span>
               </NavLink>
+            </div>
+          )}
+        </div>
+
+        <div className={`nav-group ${isSystemActive ? "expanded" : ""}`}>
+          <NavLink
+            to="/system/users"
+            className={() =>
+              `nav-item nav-parent ${isSystemActive ? "active" : ""}`
+            }
+          >
+            <span className="nav-icon">{Icons.system}</span>
+            <span className="nav-label">System</span>
+          </NavLink>
+
+          {isSystemActive && (
+            <div className="nav-submenu">
               <NavLink
-                to="/settings/groups"
+                to="/system/users"
+                className={({ isActive }) =>
+                  `nav-item nav-sub ${isActive ? "active" : ""}`
+                }
+              >
+                <span className="nav-label">Users</span>
+              </NavLink>
+              <NavLink
+                to="/system/groups"
                 className={({ isActive }) =>
                   `nav-item nav-sub ${isActive ? "active" : ""}`
                 }
               >
                 <span className="nav-label">Groups</span>
+              </NavLink>
+              <NavLink
+                to="/system/roles"
+                className={({ isActive }) =>
+                  `nav-item nav-sub ${isActive ? "active" : ""}`
+                }
+              >
+                <span className="nav-label">Roles</span>
               </NavLink>
             </div>
           )}

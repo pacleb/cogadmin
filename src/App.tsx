@@ -7,6 +7,8 @@ import { ConcernsPage } from "./pages/ConcernsPage";
 import { ReportsPage } from "./pages/ReportsPage";
 import { AccountPage } from "./pages/AccountPage";
 import { GroupsPage } from "./pages/GroupsPage";
+import { RolesPage } from "./pages/RolesPage";
+import { UsersPage } from "./pages/UsersPage";
 import "./App.css";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -61,7 +63,13 @@ function AppRoutes() {
           element={<Navigate to="/settings/account" replace />}
         />
         <Route path="/settings/account" element={<AccountPage />} />
-        <Route path="/settings/groups" element={<GroupsPage />} />
+        <Route
+          path="/system"
+          element={<Navigate to="/system/users" replace />}
+        />
+        <Route path="/system/users" element={<UsersPage />} />
+        <Route path="/system/groups" element={<GroupsPage />} />
+        <Route path="/system/roles" element={<RolesPage />} />
       </Route>
     </Routes>
   );
