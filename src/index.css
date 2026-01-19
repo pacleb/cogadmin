@@ -1,25 +1,26 @@
 :root {
-  /* Colors */
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
-  --primary-color-alpha: rgba(99, 102, 241, 0.2);
+  /* Colors - Modern Minimal */
+  --primary-color: #18181b;
+  --primary-hover: #27272a;
+  --primary-color-alpha: rgba(24, 24, 27, 0.08);
+  --accent-color: #3b82f6;
 
   /* Backgrounds */
-  --bg-primary: #f8fafc;
+  --bg-primary: #fafafa;
   --card-bg: #ffffff;
-  --column-bg: #f1f5f9;
+  --column-bg: #f4f4f5;
   --input-bg: #ffffff;
-  --secondary-bg: #e2e8f0;
-  --secondary-hover: #cbd5e1;
+  --secondary-bg: #f4f4f5;
+  --secondary-hover: #e4e4e7;
 
   /* Text */
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
 
   /* Borders */
-  --border-color: #e2e8f0;
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-color: #e4e4e7;
+  --shadow-color: rgba(0, 0, 0, 0.04);
 
   /* Typography */
   font-family:
@@ -40,23 +41,24 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #818cf8;
-    --primary-hover: #6366f1;
-    --primary-color-alpha: rgba(129, 140, 248, 0.2);
+    --primary-color: #fafafa;
+    --primary-hover: #e4e4e7;
+    --primary-color-alpha: rgba(250, 250, 250, 0.08);
+    --accent-color: #60a5fa;
 
-    --bg-primary: #0f172a;
-    --card-bg: #1e293b;
-    --column-bg: #1e293b;
-    --input-bg: #334155;
-    --secondary-bg: #334155;
-    --secondary-hover: #475569;
+    --bg-primary: #09090b;
+    --card-bg: #18181b;
+    --column-bg: #1f1f23;
+    --input-bg: #27272a;
+    --secondary-bg: #27272a;
+    --secondary-hover: #3f3f46;
 
-    --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-muted: #64748b;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
 
-    --border-color: #334155;
-    --shadow-color: rgba(0, 0, 0, 0.3);
+    --border-color: #27272a;
+    --shadow-color: rgba(0, 0, 0, 0.2);
   }
 }
 
