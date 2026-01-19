@@ -105,12 +105,7 @@ export function ConcernBoard({
         </span>
       </div>
 
-      <ConcernList
-        concerns={filteredConcerns}
-        onUpdate={onUpdateConcern}
-        onDelete={onDeleteConcern}
-        onStatusChange={onStatusChange}
-      />
+      <ConcernList concerns={filteredConcerns} onUpdate={onUpdateConcern} />
     </div>
   );
 }

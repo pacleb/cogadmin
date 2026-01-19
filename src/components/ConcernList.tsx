@@ -11,16 +11,9 @@ interface ConcernListProps {
     id: string,
     updates: Partial<Omit<Concern, "id" | "createdAt">>,
   ) => void;
-  _onDelete: (id: string) => void;
-  _onStatusChange: (id: string, status: ConcernStatus) => void;
 }
 
-export function ConcernList({
-  concerns,
-  onUpdate,
-  _onDelete,
-  _onStatusChange,
-}: ConcernListProps) {
+export function ConcernList({ concerns, onUpdate }: ConcernListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   if (concerns.length === 0) {

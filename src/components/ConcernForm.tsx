@@ -59,10 +59,6 @@ export function ConcernForm({
   const { user } = useAuth();
   const [groups, setGroups] = useState<Group[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [currentUserProfile, setCurrentUserProfile] = useState<{
-    group_code: string | null;
-    nickname: string;
-  } | null>(null);
   const [groupCode, setGroupCode] = useState(initialValues?.groupCode ?? "");
   const [urgency, setUrgency] = useState<ConcernUrgency>(
     initialValues?.urgency ?? "Normal",
@@ -109,7 +105,7 @@ export function ConcernForm({
           user
             ? supabase
                 .from("profiles")
-                .select("group_code, nickname")
+                .select("nickname")
                 .eq("user_id", user.id)
                 .single()
             : Promise.resolve({ data: null, error: null }),
@@ -120,13 +116,9 @@ export function ConcernForm({
         // Filter out empty nicknames
         setProfiles(profilesResult.data.filter((p) => p.nickname));
       }
-      if (currentUserResult.data) {
-        setCurrentUserProfile(currentUserResult.data);
+      if (currentUserResult.data && !currentUserResult.error) {
         // Set defaults only if this is a new concern (no initialValues)
         if (!initialValues) {
-          if (currentUserResult.data.group_code) {
-            setGroupCode(currentUserResult.data.group_code);
-          }
           if (currentUserResult.data.nickname) {
             setPic(currentUserResult.data.nickname);
           }
