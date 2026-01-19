@@ -197,7 +197,12 @@ export function ConcernForm({
 
         <div className="form-group">
           <label htmlFor="pic">PIC (Person in Charge) *</label>
-          <select id="pic" value={pic} onChange={(e) => setPic(e.target.value)} required>
+          <select
+            id="pic"
+            value={pic}
+            onChange={(e) => setPic(e.target.value)}
+            required
+          >
             <option value="">Select PIC</option>
             {profiles.map((profile) => (
               <option key={profile.nickname} value={profile.nickname}>

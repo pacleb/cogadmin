@@ -127,6 +127,31 @@ export function useConcerns() {
         if (updates.status !== undefined) updateData.status = updates.status;
         if (updates.detailedStatus !== undefined) updateData.detailed_status = updates.detailedStatus;
         if (updates.pic !== undefined) updateData.pic = updates.pic;
+        
+        // Auto-reassign PIC to Admin Head for specific statuses
+        if (updates.status && ['New', 'For Delegating', 'For Download', 'For Update', 'For Report', 'For Approval'].includes(updates.status)) {
+          const { data: adminHead } = await supabase
+            .from('profiles')
+            .select('nickname')
+            .eq('role_id', (
+              await supabase
+                .from('roles')
+                .select('id')
+                .eq('name', 'Admin Head')
+                .single()
+            ).data?.id)
+            .single();
+          
+          if (adminHead?.nickname) {
+            updateData.pic = adminHead.nickname;
+          }
+        }
+        
+        // Auto-set Detailed Status to Pending when Status is Preparing or Ongoing
+        if (updates.status && ['Preparing', 'Ongoing'].includes(updates.status)) {
+          updateData.detailed_status = 'Pending';
+        }
+        
         // Note: end_date is handled by database trigger
 
         const { error } = await supabase

@@ -61,14 +61,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .add-concern-btn .btn-icon svg {
-  width: 18px;
-  height: 18px;
-  stroke: #ffffff;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  color: #ffffff;
 }
 
 .add-concern-btn:hover {

@@ -10,7 +10,7 @@ export function ConcernsAssignedToGroupPage() {
 
   // Filter concerns where group matches the logged-in user's group
   const assignedToGroup = concerns.filter(
-    (concern) => concern.groupCode === profile?.groupCode
+    (concern) => concern.groupCode === profile?.groupCode,
   );
 
   if (loading) {

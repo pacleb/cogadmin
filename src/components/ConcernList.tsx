@@ -127,13 +127,15 @@ export function ConcernList({
           </tr>
         </thead>
         <tbody>
-          {sortedConcerns.map((concern) => (
-            <tr
-              key={concern.id}
-              className={`concern-row urgency-${concern.urgency.toLowerCase().replace(" ", "-")}`}
-              onClick={() => setEditingId(concern.id)}
-              style={{ cursor: "pointer" }}
-            >
+          {sortedConcerns.map((concern) => {
+            const isHighlighted = ['For Update', 'For Report', 'For Approval'].includes(concern.status);
+            return (
+              <tr
+                key={concern.id}
+                className={`concern-row urgency-${concern.urgency.toLowerCase().replace(" ", "-")}${isHighlighted ? ' highlighted-status' : ''}`}
+                onClick={() => setEditingId(concern.id)}
+                style={{ cursor: "pointer" }}
+              >
               <td className="group-cell">
                 <span className="group-badge">{concern.groupCode}</span>
               </td>
@@ -155,8 +157,9 @@ export function ConcernList({
               </td>
               <td className="date-cell">{formatDate(concern.startDate)}</td>
               <td className="date-cell">{formatDate(concern.endDate)}</td>
-            </tr>
-          ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

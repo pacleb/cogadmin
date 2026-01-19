@@ -10,7 +10,7 @@ export function ConcernsAssignedToMePage() {
 
   // Filter concerns where PIC matches the logged-in user's nickname
   const assignedToMe = concerns.filter(
-    (concern) => concern.pic === profile?.nickname
+    (concern) => concern.pic === profile?.nickname,
   );
 
   if (loading) {
