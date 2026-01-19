@@ -1,8 +1,11 @@
 import { useAuth } from "../contexts/AuthContext";
+import { useGroups } from "../hooks/useGroups";
+import { GroupTable } from "../components/GroupTable";
 import "./SettingsPage.css";
 
 export function SettingsPage() {
   const { user } = useAuth();
+  const { groups, loading, addGroup, updateGroup, deleteGroup } = useGroups();
 
   return (
     <div className="settings-page">
@@ -26,10 +29,14 @@ export function SettingsPage() {
       </section>
 
       <section className="settings-section">
-        <h2>Preferences</h2>
-        <div className="coming-soon-small">
-          <p>⚙️ More settings coming soon...</p>
-        </div>
+        <h2>Groups</h2>
+        <GroupTable
+          groups={groups}
+          loading={loading}
+          onAdd={addGroup}
+          onUpdate={updateGroup}
+          onDelete={deleteGroup}
+        />
       </section>
     </div>
   );
