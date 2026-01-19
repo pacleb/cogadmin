@@ -28,7 +28,6 @@ export function ConcernsPage() {
         onAddConcern={addConcern}
         onUpdateConcern={updateConcern}
         onDeleteConcern={deleteConcern}
-        onStatusChange={updateConcernStatus}
       />
     </div>
   );

@@ -31,7 +31,6 @@ export function ConcernsAssignedToMePage() {
         onAddConcern={addConcern}
         onUpdateConcern={updateConcern}
         onDeleteConcern={deleteConcern}
-        onStatusChange={updateConcernStatus}
         title="Assigned to Me"
       />
     </div>
