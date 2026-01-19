@@ -1,11 +1,13 @@
 import { useState } from "react";
 import type { UserProfile } from "../hooks/useUsers";
 import type { Role } from "../types/Role";
+import type { Group } from "../types/Group";
 import "./UserTable.css";
 
 interface UserTableProps {
   users: UserProfile[];
   roles: Role[];
+  groups: Group[];
   loading: boolean;
   onAdd: (userData: {
     email: string;
@@ -14,6 +16,7 @@ interface UserTableProps {
     nickname: string;
     mobile: string;
     role_id: string | null;
+    group_code?: string | null;
   }) => Promise<unknown>;
   onUpdate: (
     id: string,
@@ -22,6 +25,7 @@ interface UserTableProps {
       nickname?: string;
       mobile?: string;
       role_id?: string | null;
+      group_code?: string | null;
     },
   ) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
@@ -30,6 +34,7 @@ interface UserTableProps {
 export function UserTable({
   users,
   roles,
+  groups,
   loading,
   onAdd,
   onUpdate,
@@ -42,6 +47,7 @@ export function UserTable({
     nickname: "",
     mobile: "",
     role_id: "" as string | null,
+    group_code: "" as string | null,
   });
   const [addFormData, setAddFormData] = useState({
     email: "",
@@ -50,17 +56,38 @@ export function UserTable({
     nickname: "",
     mobile: "",
     role_id: "" as string | null,
+    group_code: "" as string | null,
   });
   const [saving, setSaving] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
 
   const handleAdd = async () => {
-    if (!addFormData.email.trim() || !addFormData.password.trim()) {
-      setAddError("Email and password are required");
+    if (!addFormData.email.trim()) {
+      setAddError("Email is required");
+      return;
+    }
+    if (!addFormData.password.trim()) {
+      setAddError("Password is required");
       return;
     }
     if (addFormData.password.length < 6) {
       setAddError("Password must be at least 6 characters");
+      return;
+    }
+    if (!addFormData.name.trim()) {
+      setAddError("Name is required");
+      return;
+    }
+    if (!addFormData.nickname.trim()) {
+      setAddError("Nickname is required");
+      return;
+    }
+    if (!addFormData.group_code) {
+      setAddError("Group is required");
+      return;
+    }
+    if (!addFormData.role_id) {
+      setAddError("Role is required");
       return;
     }
 
@@ -74,6 +101,7 @@ export function UserTable({
         nickname: addFormData.nickname.trim(),
         mobile: addFormData.mobile.trim(),
         role_id: addFormData.role_id || null,
+        group_code: addFormData.group_code || null,
       });
       setAddFormData({
         email: "",
@@ -82,6 +110,7 @@ export function UserTable({
         nickname: "",
         mobile: "",
         role_id: null,
+        group_code: null,
       });
       setIsAdding(false);
     } catch (err) {
@@ -92,6 +121,19 @@ export function UserTable({
   };
 
   const handleUpdate = async (id: string) => {
+    if (!formData.name.trim()) {
+      return;
+    }
+    if (!formData.nickname.trim()) {
+      return;
+    }
+    if (!formData.group_code) {
+      return;
+    }
+    if (!formData.role_id) {
+      return;
+    }
+
     try {
       setSaving(true);
       await onUpdate(id, {
@@ -99,9 +141,16 @@ export function UserTable({
         nickname: formData.nickname.trim(),
         mobile: formData.mobile.trim(),
         role_id: formData.role_id || null,
+        group_code: formData.group_code || null,
       });
       setEditingId(null);
-      setFormData({ name: "", nickname: "", mobile: "", role_id: null });
+      setFormData({
+        name: "",
+        nickname: "",
+        mobile: "",
+        role_id: null,
+        group_code: null,
+      });
     } catch {
       // Error handled in hook
     } finally {
@@ -126,13 +175,20 @@ export function UserTable({
       nickname: user.nickname,
       mobile: user.mobile,
       role_id: user.roleId,
+      group_code: user.groupCode,
     });
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setIsAdding(false);
-    setFormData({ name: "", nickname: "", mobile: "", role_id: null });
+    setFormData({
+      name: "",
+      nickname: "",
+      mobile: "",
+      role_id: null,
+      group_code: null,
+    });
     setAddFormData({
       email: "",
       password: "",
@@ -140,6 +196,7 @@ export function UserTable({
       nickname: "",
       mobile: "",
       role_id: null,
+      group_code: null,
     });
     setAddError(null);
   };
@@ -212,7 +269,7 @@ export function UserTable({
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Name</label>
+              <label>Name *</label>
               <input
                 type="text"
                 value={addFormData.name}
@@ -220,10 +277,11 @@ export function UserTable({
                   setAddFormData({ ...addFormData, name: e.target.value })
                 }
                 placeholder="Full name"
+                required
               />
             </div>
             <div className="form-group">
-              <label>Nickname</label>
+              <label>Nickname *</label>
               <input
                 type="text"
                 value={addFormData.nickname}
@@ -231,6 +289,7 @@ export function UserTable({
                   setAddFormData({ ...addFormData, nickname: e.target.value })
                 }
                 placeholder="Nickname"
+                required
               />
             </div>
           </div>
@@ -247,7 +306,7 @@ export function UserTable({
               />
             </div>
             <div className="form-group">
-              <label>Role</label>
+              <label>Role *</label>
               <select
                 value={addFormData.role_id || ""}
                 onChange={(e) =>
@@ -256,8 +315,9 @@ export function UserTable({
                     role_id: e.target.value || null,
                   })
                 }
+                required
               >
-                <option value="">No Role</option>
+                <option value="">Select Role</option>
                 {roles.map((role) => (
                   <option key={role.id} value={role.id}>
                     {role.name}
@@ -266,6 +326,29 @@ export function UserTable({
               </select>
             </div>
           </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Group *</label>
+              <select
+                value={addFormData.group_code || ""}
+                onChange={(e) =>
+                  setAddFormData({
+                    ...addFormData,
+                    group_code: e.target.value || null,
+                  })
+                }
+                required
+              >
+                <option value="">Select Group</option>
+                {groups.map((group) => (
+                  <option key={group.id} value={group.code}>
+                    {group.code} - {group.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group"></div>
+          </div>
           <div className="form-actions">
             <button
               className="btn-save"
@@ -273,7 +356,11 @@ export function UserTable({
               disabled={
                 saving ||
                 !addFormData.email.trim() ||
-                !addFormData.password.trim()
+                !addFormData.password.trim() ||
+                !addFormData.name.trim() ||
+                !addFormData.nickname.trim() ||
+                !addFormData.group_code ||
+                !addFormData.role_id
               }
             >
               {saving ? "Creating..." : "Create User"}
@@ -292,6 +379,7 @@ export function UserTable({
             <th>Name</th>
             <th>Nickname</th>
             <th>Mobile</th>
+            <th>Group</th>
             <th>Role</th>
             <th>Actions</th>
           </tr>
@@ -299,7 +387,7 @@ export function UserTable({
         <tbody>
           {users.length === 0 ? (
             <tr>
-              <td colSpan={6} className="empty-message">
+              <td colSpan={7} className="empty-message">
                 No users found. Click "Add User" to create one.
               </td>
             </tr>
@@ -342,6 +430,25 @@ export function UserTable({
                     </td>
                     <td>
                       <select
+                        value={formData.group_code || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            group_code: e.target.value || null,
+                          })
+                        }
+                        required
+                      >
+                        <option value="">Select Group</option>
+                        {groups.map((group) => (
+                          <option key={group.id} value={group.code}>
+                            {group.code}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <select
                         value={formData.role_id || ""}
                         onChange={(e) =>
                           setFormData({
@@ -349,8 +456,9 @@ export function UserTable({
                             role_id: e.target.value || null,
                           })
                         }
+                        required
                       >
-                        <option value="">No Role</option>
+                        <option value="">Select Role</option>
                         {roles.map((role) => (
                           <option key={role.id} value={role.id}>
                             {role.name}
@@ -363,7 +471,13 @@ export function UserTable({
                         <button
                           className="btn-save"
                           onClick={() => handleUpdate(user.id)}
-                          disabled={saving}
+                          disabled={
+                            saving ||
+                            !formData.name.trim() ||
+                            !formData.nickname.trim() ||
+                            !formData.group_code ||
+                            !formData.role_id
+                          }
                         >
                           {saving ? "..." : "Save"}
                         </button>
@@ -379,6 +493,7 @@ export function UserTable({
                     <td>{user.name || "—"}</td>
                     <td>{user.nickname || "—"}</td>
                     <td>{user.mobile || "—"}</td>
+                    <td>{user.groupCode || "—"}</td>
                     <td>
                       <span
                         className={`role-badge ${user.roleId ? "" : "no-role"}`}

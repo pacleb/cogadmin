@@ -1,7 +1,8 @@
 /**
  * Format a date as "Mmm d, YYYY" (e.g., "Jan 1, 2026")
  */
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | null): string {
+  if (!date) return "-";
   return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -12,7 +13,8 @@ export function formatDate(date: Date): string {
 /**
  * Format a date with time as "Mmm d, YYYY h:mm AM/PM" (e.g., "Jan 1, 2026 2:30 PM")
  */
-export function formatDateTime(date: Date): string {
+export function formatDateTime(date: Date | null): string {
+  if (!date) return "-";
   return date.toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',

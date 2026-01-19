@@ -3,6 +3,10 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "./Sidebar.css";
 
+interface SidebarProps {
+  onCollapsedChange?: (collapsed: boolean) => void;
+}
+
 // Minimal flat SVG icons
 const Icons = {
   dashboard: (
@@ -148,11 +152,17 @@ const Icons = {
   ),
 };
 
-export function Sidebar() {
+export function Sidebar({ onCollapsedChange }: SidebarProps) {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Notify parent when collapsed state changes
+  useEffect(() => {
+    onCollapsedChange?.(sidebarCollapsed);
+  }, [sidebarCollapsed, onCollapsedChange]);
 
   const isConcernsActive = location.pathname.startsWith("/concerns");
   const isSettingsActive = location.pathname.startsWith("/settings");
@@ -377,9 +387,17 @@ export function Sidebar() {
       </aside>
 
       {/* Desktop Sidebar */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
         <div className="sidebar-header">
           <h1 className="sidebar-logo">Admin</h1>
+          <button
+            className="sidebar-collapse-btn"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            aria-label="Toggle sidebar"
+            title={sidebarCollapsed ? "Expand" : "Collapse"}
+          >
+            {sidebarCollapsed ? "›" : "‹"}
+          </button>
         </div>
 
         <nav className="sidebar-nav">{renderNavContent()}</nav>

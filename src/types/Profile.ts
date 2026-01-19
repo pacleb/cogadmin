@@ -7,6 +7,7 @@ export interface Profile {
   mobile: string;
   roleId: string | null;
   roleName?: string;
+  groupCode: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

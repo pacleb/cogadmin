@@ -11,6 +11,7 @@ export interface UserProfile {
   mobile: string;
   roleId: string | null;
   roleName: string;
+  groupCode: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +24,7 @@ interface ProfileRow {
   nickname: string;
   mobile: string;
   role_id: string | null;
+  group_code: string | null;
   created_at: string;
   updated_at: string;
   roles?: { name: string } | null;
@@ -61,6 +63,7 @@ export function useUsers() {
         mobile: row.mobile || '',
         roleId: row.role_id,
         roleName: row.roles?.name || '',
+        groupCode: row.group_code,
         createdAt: new Date(row.created_at),
         updatedAt: new Date(row.updated_at),
       }));
@@ -80,7 +83,7 @@ export function useUsers() {
   }, [fetchUsers]);
 
   const updateUser = useCallback(
-    async (id: string, updates: { name?: string; nickname?: string; mobile?: string; role_id?: string | null }) => {
+    async (id: string, updates: { name?: string; nickname?: string; mobile?: string; role_id?: string | null; group_code?: string | null }) => {
       if (!user) return;
 
       try {
@@ -132,6 +135,7 @@ export function useUsers() {
       nickname: string;
       mobile: string;
       role_id: string | null;
+      group_code?: string | null;
     }) => {
       if (!user) return;
 
@@ -185,6 +189,7 @@ export function useUsers() {
               nickname: userData.nickname,
               mobile: userData.mobile,
               role_id: userData.role_id,
+              group_code: userData.group_code || null,
               updated_at: new Date().toISOString(),
             })
             .eq('user_id', newUserId);
@@ -203,6 +208,7 @@ export function useUsers() {
               nickname: userData.nickname,
               mobile: userData.mobile,
               role_id: userData.role_id,
+              group_code: userData.group_code || null,
             });
 
           if (insertError) {
