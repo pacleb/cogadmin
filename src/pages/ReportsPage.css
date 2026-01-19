@@ -1,0 +1,46 @@
+.reports-page {
+  padding: 2rem;
+  max-width: 1200px;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  color: var(--text-primary);
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.coming-soon-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.coming-soon h2 {
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.coming-soon p {
+  margin: 0;
+  color: var(--text-secondary);
+}

@@ -1,0 +1,71 @@
+.settings-page {
+  padding: 2rem;
+  max-width: 800px;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  color: var(--text-primary);
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.settings-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item label {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.setting-value {
+  color: var(--text-secondary);
+}
+
+.setting-id {
+  font-family: monospace;
+  font-size: 0.8125rem;
+}
+
+.coming-soon-small {
+  padding: 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  text-align: center;
+  color: var(--text-muted);
+}

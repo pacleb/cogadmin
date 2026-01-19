@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import { useConcerns } from "./hooks/useConcernsSupabase";
-import { ConcernBoard } from "./components/ConcernBoard";
+import { Layout } from "./components/Layout";
 import { AuthPage } from "./pages/AuthPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { ConcernsPage } from "./pages/ConcernsPage";
+import { ReportsPage } from "./pages/ReportsPage";
+import { SettingsPage } from "./pages/SettingsPage";
 import "./App.css";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -24,43 +27,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function Dashboard() {
-  const { user, signOut } = useAuth();
-  const {
-    concerns,
-    loading,
-    addConcern,
-    updateConcern,
-    deleteConcern,
-    updateConcernStatus,
-  } = useConcerns();
-
-  return (
-    <div className="app">
-      <header className="app-header">
-        <span className="user-email">{user?.email}</span>
-        <button className="btn btn-secondary sign-out-btn" onClick={signOut}>
-          Sign Out
-        </button>
-      </header>
-      {loading ? (
-        <div className="loading-screen">
-          <div className="loading-spinner"></div>
-          <p>Loading concerns...</p>
-        </div>
-      ) : (
-        <ConcernBoard
-          concerns={concerns}
-          onAddConcern={addConcern}
-          onUpdateConcern={updateConcern}
-          onDeleteConcern={deleteConcern}
-          onStatusChange={updateConcernStatus}
-        />
-      )}
-    </div>
-  );
-}
-
 function AppRoutes() {
   const { user, loading } = useAuth();
 
@@ -80,13 +46,17 @@ function AppRoutes() {
         element={user ? <Navigate to="/" replace /> : <AuthPage />}
       />
       <Route
-        path="/"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/concerns" element={<ConcernsPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
+      </Route>
     </Routes>
   );
 }
