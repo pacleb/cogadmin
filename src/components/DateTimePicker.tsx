@@ -8,6 +8,7 @@ interface DateTimePickerProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   placeholder?: string;
+  required?: boolean;
 }
 
 export function DateTimePicker({
@@ -16,6 +17,7 @@ export function DateTimePicker({
   onChange,
   disabled = false,
   placeholder = "Select date and time",
+  required = false,
 }: DateTimePickerProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -46,6 +48,7 @@ export function DateTimePicker({
         onChange={(e) => onChange(e.target.value)}
         className="datetime-native"
         disabled={disabled}
+        required={required}
       />
     </div>
   );

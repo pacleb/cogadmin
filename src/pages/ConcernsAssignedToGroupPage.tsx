@@ -1,13 +1,17 @@
 import { useConcerns } from "../hooks/useConcernsSupabase";
+import { useProfile } from "../hooks/useProfile";
 import { ConcernBoard } from "../components/ConcernBoard";
 import "./ConcernsPage.css";
 
 export function ConcernsAssignedToGroupPage() {
   const { concerns, loading, addConcern, updateConcern, deleteConcern } =
     useConcerns();
+  const { profile } = useProfile();
 
-  // TODO: Filter concerns assigned to current user's group once assignment field is added
-  const assignedToGroup = concerns;
+  // Filter concerns where group matches the logged-in user's group
+  const assignedToGroup = concerns.filter(
+    (concern) => concern.groupCode === profile?.groupCode
+  );
 
   if (loading) {
     return (

@@ -131,6 +131,9 @@ export function ConcernForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!task.trim() || !groupCode) return;
+    if (!pic) return; // PIC is required
+    if (!status) return; // Status is required
+    if (!startDate) return; // Start Date is required
     if (requiresDetailedStatus && !detailedStatus) return;
 
     onSubmit({
@@ -193,8 +196,8 @@ export function ConcernForm({
         </div>
 
         <div className="form-group">
-          <label htmlFor="pic">PIC (Person in Charge)</label>
-          <select id="pic" value={pic} onChange={(e) => setPic(e.target.value)}>
+          <label htmlFor="pic">PIC (Person in Charge) *</label>
+          <select id="pic" value={pic} onChange={(e) => setPic(e.target.value)} required>
             <option value="">Select PIC</option>
             {profiles.map((profile) => (
               <option key={profile.nickname} value={profile.nickname}>
@@ -233,11 +236,12 @@ export function ConcernForm({
 
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="status">Status</label>
+          <label htmlFor="status">Status *</label>
           <select
             id="status"
             value={status}
             onChange={(e) => setStatus(e.target.value as ConcernStatus)}
+            required
           >
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt} value={opt}>
@@ -279,11 +283,12 @@ export function ConcernForm({
 
       <div className="form-row">
         <div className="form-group">
-          <label htmlFor="startDate">Start Date</label>
+          <label htmlFor="startDate">Start Date *</label>
           <DateTimePicker
             id="startDate"
             value={startDate}
             onChange={setStartDate}
+            required
           />
         </div>
 

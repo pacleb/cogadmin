@@ -39,7 +39,6 @@ export function useConcerns() {
       const { data, error } = await supabase
         .from('concerns')
         .select('*')
-        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -71,7 +70,6 @@ export function useConcerns() {
           event: '*',
           schema: 'public',
           table: 'concerns',
-          filter: `user_id=eq.${user.id}`,
         },
         () => {
           // Refetch on any change
