@@ -56,6 +56,7 @@ export function useGroups() {
 
       try {
         const { error } = await supabase.from('groups').insert({
+          user_id: user.id,
           code: group.code,
           name: group.name,
           weight: group.weight ?? 0,

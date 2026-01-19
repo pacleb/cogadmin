@@ -7,10 +7,15 @@ import type { ConcernRow } from '../types/database';
 // Convert database row to Concern type
 const rowToConcern = (row: ConcernRow): Concern => ({
   id: row.id,
-  title: row.title,
-  description: row.description || '',
+  groupCode: row.group_code,
+  urgency: row.urgency,
+  task: row.task,
+  startDate: new Date(row.start_date),
+  remarks: row.remarks || '',
   status: row.status,
-  priority: row.priority,
+  detailedStatus: row.detailed_status || '',
+  pic: row.pic || '',
+  endDate: row.end_date ? new Date(row.end_date) : null,
   createdAt: new Date(row.created_at),
   updatedAt: new Date(row.updated_at),
 });
@@ -81,16 +86,20 @@ export function useConcerns() {
   }, [user, fetchConcerns]);
 
   const addConcern = useCallback(
-    async (concern: Omit<Concern, 'id' | 'createdAt' | 'updatedAt'>) => {
+    async (concern: Omit<Concern, 'id' | 'createdAt' | 'updatedAt' | 'endDate'>) => {
       if (!user) return;
 
       try {
         const { error } = await supabase.from('concerns').insert({
           user_id: user.id,
-          title: concern.title,
-          description: concern.description || null,
+          group_code: concern.groupCode,
+          urgency: concern.urgency,
+          task: concern.task,
+          start_date: concern.startDate.toISOString(),
+          remarks: concern.remarks || null,
           status: concern.status,
-          priority: concern.priority,
+          detailed_status: concern.detailedStatus || null,
+          pic: concern.pic || null,
         });
 
         if (error) throw error;
@@ -108,17 +117,24 @@ export function useConcerns() {
       if (!user) return;
 
       try {
+        const updateData: Record<string, unknown> = {
+          updated_at: new Date().toISOString(),
+        };
+        
+        if (updates.groupCode !== undefined) updateData.group_code = updates.groupCode;
+        if (updates.urgency !== undefined) updateData.urgency = updates.urgency;
+        if (updates.task !== undefined) updateData.task = updates.task;
+        if (updates.startDate !== undefined) updateData.start_date = updates.startDate.toISOString();
+        if (updates.remarks !== undefined) updateData.remarks = updates.remarks;
+        if (updates.status !== undefined) updateData.status = updates.status;
+        if (updates.detailedStatus !== undefined) updateData.detailed_status = updates.detailedStatus;
+        if (updates.pic !== undefined) updateData.pic = updates.pic;
+        // Note: end_date is handled by database trigger
+
         const { error } = await supabase
           .from('concerns')
-          .update({
-            ...(updates.title && { title: updates.title }),
-            ...(updates.description !== undefined && { description: updates.description }),
-            ...(updates.status && { status: updates.status }),
-            ...(updates.priority && { priority: updates.priority }),
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', id)
-          .eq('user_id', user.id);
+          .update(updateData)
+          .eq('id', id);
 
         if (error) throw error;
         await fetchConcerns();

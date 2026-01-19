@@ -52,7 +52,7 @@ export function useUsers() {
 
       if (profilesError) throw profilesError;
 
-      const userList: UserProfile[] = (profiles || []).map((row: ProfileRow) => ({
+      const userList: UserProfile[] = ((profiles || []) as unknown as ProfileRow[]).map((row: ProfileRow) => ({
         id: row.id,
         userId: row.user_id,
         email: row.email || '',

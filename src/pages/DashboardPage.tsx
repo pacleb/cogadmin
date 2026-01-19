@@ -14,13 +14,15 @@ export function DashboardPage() {
     );
   }
 
-  const todoCount = concerns.filter((c) => c.status === "todo").length;
-  const inProgressCount = concerns.filter(
-    (c) => c.status === "in-progress",
+  const newCount = concerns.filter((c) => c.status === "New").length;
+  const ongoingCount = concerns.filter(
+    (c) => c.status !== "New" && c.status !== "Accomplished",
   ).length;
-  const doneCount = concerns.filter((c) => c.status === "done").length;
-  const highPriorityCount = concerns.filter(
-    (c) => c.priority === "high" && c.status !== "done",
+  const accomplishedCount = concerns.filter(
+    (c) => c.status === "Accomplished",
+  ).length;
+  const emergencyCount = concerns.filter(
+    (c) => c.urgency === "EMERGENCY" && c.status !== "Accomplished",
   ).length;
 
   return (
@@ -42,32 +44,32 @@ export function DashboardPage() {
         <div className="stat-card todo">
           <div className="stat-icon">{Icons.todo}</div>
           <div className="stat-content">
-            <span className="stat-value">{todoCount}</span>
-            <span className="stat-label">To Do</span>
+            <span className="stat-value">{newCount}</span>
+            <span className="stat-label">New</span>
           </div>
         </div>
 
         <div className="stat-card in-progress">
           <div className="stat-icon">{Icons.inProgress}</div>
           <div className="stat-content">
-            <span className="stat-value">{inProgressCount}</span>
-            <span className="stat-label">In Progress</span>
+            <span className="stat-value">{ongoingCount}</span>
+            <span className="stat-label">Ongoing</span>
           </div>
         </div>
 
         <div className="stat-card done">
           <div className="stat-icon">{Icons.done}</div>
           <div className="stat-content">
-            <span className="stat-value">{doneCount}</span>
-            <span className="stat-label">Done</span>
+            <span className="stat-value">{accomplishedCount}</span>
+            <span className="stat-label">Accomplished</span>
           </div>
         </div>
 
         <div className="stat-card high-priority">
           <div className="stat-icon">{Icons.highPriority}</div>
           <div className="stat-content">
-            <span className="stat-value">{highPriorityCount}</span>
-            <span className="stat-label">High Priority</span>
+            <span className="stat-value">{emergencyCount}</span>
+            <span className="stat-label">Emergency</span>
           </div>
         </div>
       </div>
@@ -82,14 +84,15 @@ export function DashboardPage() {
           <ul className="recent-list">
             {concerns.slice(0, 5).map((concern) => (
               <li key={concern.id} className="recent-item">
-                <span className={`priority-dot ${concern.priority}`}></span>
-                <span className="recent-title">{concern.title}</span>
-                <span className={`status-badge ${concern.status}`}>
-                  {concern.status === "in-progress"
-                    ? "In Progress"
-                    : concern.status === "todo"
-                      ? "To Do"
-                      : "Done"}
+                <span
+                  className={`urgency-dot ${concern.urgency.toLowerCase().replace(" ", "-")}`}
+                ></span>
+                <span className="recent-title">{concern.task}</span>
+                <span className="recent-group">{concern.groupCode}</span>
+                <span
+                  className={`status-badge ${concern.status.toLowerCase().replace(" ", "-")}`}
+                >
+                  {concern.status}
                 </span>
               </li>
             ))}

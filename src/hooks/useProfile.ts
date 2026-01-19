@@ -56,7 +56,7 @@ export function useProfile() {
       }
 
       if (data) {
-        setProfile(rowToProfile(data));
+        setProfile(rowToProfile(data as unknown as ProfileRow));
       } else {
         // Create a new profile if one doesn't exist
         const { data: newProfile, error: insertError } = await supabase
@@ -73,7 +73,7 @@ export function useProfile() {
 
         if (insertError) throw insertError;
         if (newProfile) {
-          setProfile(rowToProfile(newProfile));
+          setProfile(rowToProfile(newProfile as unknown as ProfileRow));
         }
       }
       setError(null);

@@ -123,21 +123,27 @@
   border-bottom: none;
 }
 
-.priority-dot {
+.urgency-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.priority-dot.high {
-  background: #ef4444;
+.urgency-dot.emergency {
+  background: #dc2626;
 }
-.priority-dot.medium {
+.urgency-dot.major-urgent {
+  background: #ea580c;
+}
+.urgency-dot.urgent {
   background: #f59e0b;
 }
-.priority-dot.low {
-  background: #10b981;
+.urgency-dot.major {
+  background: #3b82f6;
+}
+.urgency-dot.normal {
+  background: #22c55e;
 }
 
 .recent-title {
@@ -146,40 +152,63 @@
   font-weight: 500;
 }
 
+.recent-group {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--secondary-bg);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
 .status-badge {
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.status-badge.todo {
+.status-badge.new {
   background: #dbeafe;
   color: #1d4ed8;
 }
 
-.status-badge.in-progress {
+.status-badge.for-delegating,
+.status-badge.preparing,
+.status-badge.for-update,
+.status-badge.for-report,
+.status-badge.for-approval,
+.status-badge.for-download,
+.status-badge.ongoing {
   background: #fef3c7;
   color: #b45309;
 }
 
-.status-badge.done {
+.status-badge.accomplished {
   background: #d1fae5;
   color: #047857;
 }
 
 @media (prefers-color-scheme: dark) {
-  .status-badge.todo {
+  .status-badge.new {
     background: #1e3a5f;
     color: #93c5fd;
   }
 
-  .status-badge.in-progress {
+  .status-badge.for-delegating,
+  .status-badge.preparing,
+  .status-badge.for-update,
+  .status-badge.for-report,
+  .status-badge.for-approval,
+  .status-badge.for-download,
+  .status-badge.ongoing {
     background: #422006;
     color: #fde047;
   }
 
-  .status-badge.done {
+  .status-badge.accomplished {
     background: #052e16;
     color: #86efac;
   }

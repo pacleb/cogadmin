@@ -1,4 +1,4 @@
-import type { Concern, ConcernStatus } from "../types/Concern";
+import type { Concern, ConcernStatus, ConcernUrgency } from "../types/Concern";
 import { ConcernCard } from "./ConcernCard";
 import "./ConcernList.css";
 
@@ -26,11 +26,17 @@ export function ConcernList({
     );
   }
 
-  // Sort by priority (high first) then by creation date (newest first)
+  // Sort by urgency (EMERGENCY first) then by creation date (newest first)
   const sortedConcerns = [...concerns].sort((a, b) => {
-    const priorityOrder = { high: 0, medium: 1, low: 2 };
-    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    const urgencyOrder: Record<ConcernUrgency, number> = {
+      EMERGENCY: 0,
+      "Major Urgent": 1,
+      Urgent: 2,
+      Major: 3,
+      Normal: 4,
+    };
+    if (urgencyOrder[a.urgency] !== urgencyOrder[b.urgency]) {
+      return urgencyOrder[a.urgency] - urgencyOrder[b.urgency];
     }
     return b.createdAt.getTime() - a.createdAt.getTime();
   });

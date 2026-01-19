@@ -8,10 +8,16 @@
 .board-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.board-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .board-title {
@@ -23,6 +29,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.board-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
 }
 
 .board-icon {

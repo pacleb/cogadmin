@@ -26,16 +26,14 @@ export function ConcernsAssignedToMePage() {
 
   return (
     <div className="concerns-page">
-      <header className="page-header">
-        <h1>Assigned to Me</h1>
-        <p>Concerns assigned to you</p>
-      </header>
       <ConcernBoard
         concerns={assignedToMe}
         onAddConcern={addConcern}
         onUpdateConcern={updateConcern}
         onDeleteConcern={deleteConcern}
         onStatusChange={updateConcernStatus}
+        title="Assigned to Me"
+        subtitle="Concerns assigned to you"
       />
     </div>
   );

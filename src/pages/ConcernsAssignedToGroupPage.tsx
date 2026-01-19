@@ -26,16 +26,14 @@ export function ConcernsAssignedToGroupPage() {
 
   return (
     <div className="concerns-page">
-      <header className="page-header">
-        <h1>Assigned to My Group</h1>
-        <p>Concerns assigned to your group</p>
-      </header>
       <ConcernBoard
         concerns={assignedToGroup}
         onAddConcern={addConcern}
         onUpdateConcern={updateConcern}
         onDeleteConcern={deleteConcern}
         onStatusChange={updateConcernStatus}
+        title="Assigned to My Group"
+        subtitle="Concerns assigned to your group"
       />
     </div>
   );

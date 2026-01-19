@@ -1,12 +1,52 @@
+export type ConcernUrgency = 
+  | 'EMERGENCY'
+  | 'Major Urgent'
+  | 'Urgent'
+  | 'Major'
+  | 'Normal';
+
+export type ConcernStatus = 
+  | 'New'
+  | 'For Delegating'
+  | 'Preparing'
+  | 'For Update'
+  | 'For Report'
+  | 'For Approval'
+  | 'For Download'
+  | 'Ongoing'
+  | 'Accomplished';
+
 export interface Concern {
   id: string;
-  title: string;
-  description: string;
-  status: 'todo' | 'in-progress' | 'done';
-  priority: 'low' | 'medium' | 'high';
+  groupCode: string;           // Connected to Group.Code
+  urgency: ConcernUrgency;
+  task: string;                // 100 characters max
+  startDate: Date;             // Default is when concern is created
+  remarks: string;             // Textarea
+  status: ConcernStatus;
+  detailedStatus: string;
+  pic: string;                 // Person in Charge - Profiles.Nickname
+  endDate: Date | null;        // Auto-filled when status = 'Accomplished', cleared otherwise
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type ConcernStatus = Concern['status'];
-export type ConcernPriority = Concern['priority'];
+export const URGENCY_OPTIONS: ConcernUrgency[] = [
+  'EMERGENCY',
+  'Major Urgent',
+  'Urgent',
+  'Major',
+  'Normal',
+];
+
+export const STATUS_OPTIONS: ConcernStatus[] = [
+  'New',
+  'For Delegating',
+  'Preparing',
+  'For Update',
+  'For Report',
+  'For Approval',
+  'For Download',
+  'Ongoing',
+  'Accomplished',
+];
