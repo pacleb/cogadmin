@@ -4,6 +4,8 @@ import { Layout } from "./components/Layout";
 import { AuthPage } from "./pages/AuthPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ConcernsPage } from "./pages/ConcernsPage";
+import { ConcernsAssignedToMePage } from "./pages/ConcernsAssignedToMePage";
+import { ConcernsAssignedToGroupPage } from "./pages/ConcernsAssignedToGroupPage";
 import { ReportsPage } from "./pages/ReportsPage";
 import { AccountPage } from "./pages/AccountPage";
 import { GroupsPage } from "./pages/GroupsPage";
@@ -56,7 +58,18 @@ function AppRoutes() {
         }
       >
         <Route path="/" element={<DashboardPage />} />
-        <Route path="/concerns" element={<ConcernsPage />} />
+        <Route
+          path="/concerns"
+          element={<Navigate to="/concerns/assigned-to-me" replace />}
+        />
+        <Route
+          path="/concerns/assigned-to-me"
+          element={<ConcernsAssignedToMePage />}
+        />
+        <Route
+          path="/concerns/assigned-to-group"
+          element={<ConcernsAssignedToGroupPage />}
+        />
         <Route path="/reports" element={<ReportsPage />} />
         <Route
           path="/settings"

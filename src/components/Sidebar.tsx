@@ -154,16 +154,18 @@ export function Sidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
 
+  const isConcernsActive = location.pathname.startsWith("/concerns");
   const isSettingsActive = location.pathname.startsWith("/settings");
   const isSystemActive = location.pathname.startsWith("/system");
 
   // Auto-expand active menus
   useEffect(() => {
     const expanded: string[] = [];
+    if (isConcernsActive) expanded.push("concerns");
     if (isSettingsActive) expanded.push("settings");
     if (isSystemActive) expanded.push("system");
     setExpandedMenus(expanded);
-  }, [isSettingsActive, isSystemActive]);
+  }, [isConcernsActive, isSettingsActive, isSystemActive]);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -200,13 +202,46 @@ export function Sidebar() {
         <span className="nav-icon">{Icons.dashboard}</span>
         <span className="nav-label">Dashboard</span>
       </NavLink>
-      <NavLink
-        to="/concerns"
-        className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+
+      <div
+        className={`nav-group ${isMenuExpanded("concerns") ? "expanded" : ""}`}
       >
-        <span className="nav-icon">{Icons.concerns}</span>
-        <span className="nav-label">Concerns</span>
-      </NavLink>
+        <button
+          type="button"
+          className={`nav-item nav-parent ${isConcernsActive ? "active" : ""}`}
+          onClick={() => toggleMenu("concerns")}
+        >
+          <span className="nav-icon">{Icons.concerns}</span>
+          <span className="nav-label">Concerns</span>
+          <span
+            className={`nav-chevron ${isMenuExpanded("concerns") ? "rotated" : ""}`}
+          >
+            {Icons.chevron}
+          </span>
+        </button>
+
+        {isMenuExpanded("concerns") && (
+          <div className="nav-submenu">
+            <NavLink
+              to="/concerns/assigned-to-me"
+              className={({ isActive }) =>
+                `nav-item nav-sub ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-label">Assigned to Me</span>
+            </NavLink>
+            <NavLink
+              to="/concerns/assigned-to-group"
+              className={({ isActive }) =>
+                `nav-item nav-sub ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-label">Assigned to My Group</span>
+            </NavLink>
+          </div>
+        )}
+      </div>
+
       <NavLink
         to="/reports"
         className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
