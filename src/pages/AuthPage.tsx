@@ -9,8 +9,9 @@ export function AuthPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showResendOption, setShowResendOption] = useState(false);
 
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, resendVerificationEmail } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ export function AuthPage() {
           setError(error.message);
         } else {
           setMessage("Check your email to confirm your account!");
+          setShowResendOption(true);
         }
       }
     } catch (err) {
@@ -37,6 +39,18 @@ export function AuthPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleResendVerification = async () => {
+    setLoading(true);
+    setError("");
+    const { error } = await resendVerificationEmail(email);
+    if (error) {
+      setError(error.message || "Failed to resend verification email");
+    } else {
+      setMessage("Verification email sent! Check your inbox.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -85,6 +99,37 @@ export function AuthPage() {
           </button>
         </form>
 
+        {showResendOption && !isLogin && (
+          <div
+            style={{
+              marginTop: "1.5rem",
+              padding: "1rem",
+              backgroundColor: "#f3f4f6",
+              borderRadius: "0.5rem",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                fontSize: "0.875rem",
+                color: "#6b7280",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Didn't receive the verification email?
+            </p>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleResendVerification}
+              disabled={loading}
+              style={{ width: "100%" }}
+            >
+              {loading ? "Sending..." : "Resend Verification Email"}
+            </button>
+          </div>
+        )}
+
         <div className="auth-footer">
           <p>
             {isLogin ? "Don't have an account?" : "Already have an account?"}
@@ -95,6 +140,7 @@ export function AuthPage() {
                 setIsLogin(!isLogin);
                 setError("");
                 setMessage("");
+                setShowResendOption(false);
               }}
             >
               {isLogin ? "Sign Up" : "Sign In"}

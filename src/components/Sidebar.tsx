@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useProfile } from "../hooks/useProfile";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -154,10 +155,15 @@ const Icons = {
 
 export function Sidebar({ onCollapsedChange }: SidebarProps) {
   const { user, signOut } = useAuth();
+  const { profile } = useProfile();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Check if user has admin access
+  const isAdminUser =
+    profile?.roleName === "Admin Head" || profile?.roleName === "System Admin";
 
   // Notify parent when collapsed state changes
   useEffect(() => {
@@ -294,47 +300,51 @@ export function Sidebar({ onCollapsedChange }: SidebarProps) {
       <div
         className={`nav-group ${isMenuExpanded("system") ? "expanded" : ""}`}
       >
-        <button
-          type="button"
-          className={`nav-item nav-parent ${isSystemActive ? "active" : ""}`}
-          onClick={() => toggleMenu("system")}
-        >
-          <span className="nav-icon">{Icons.system}</span>
-          <span className="nav-label">System</span>
-          <span
-            className={`nav-chevron ${isMenuExpanded("system") ? "rotated" : ""}`}
-          >
-            {Icons.chevron}
-          </span>
-        </button>
+        {isAdminUser && (
+          <>
+            <button
+              type="button"
+              className={`nav-item nav-parent ${isSystemActive ? "active" : ""}`}
+              onClick={() => toggleMenu("system")}
+            >
+              <span className="nav-icon">{Icons.system}</span>
+              <span className="nav-label">System</span>
+              <span
+                className={`nav-chevron ${isMenuExpanded("system") ? "rotated" : ""}`}
+              >
+                {Icons.chevron}
+              </span>
+            </button>
 
-        {isMenuExpanded("system") && (
-          <div className="nav-submenu">
-            <NavLink
-              to="/system/users"
-              className={({ isActive }) =>
-                `nav-item nav-sub ${isActive ? "active" : ""}`
-              }
-            >
-              <span className="nav-label">Users</span>
-            </NavLink>
-            <NavLink
-              to="/system/groups"
-              className={({ isActive }) =>
-                `nav-item nav-sub ${isActive ? "active" : ""}`
-              }
-            >
-              <span className="nav-label">Groups</span>
-            </NavLink>
-            <NavLink
-              to="/system/roles"
-              className={({ isActive }) =>
-                `nav-item nav-sub ${isActive ? "active" : ""}`
-              }
-            >
-              <span className="nav-label">Roles</span>
-            </NavLink>
-          </div>
+            {isMenuExpanded("system") && (
+              <div className="nav-submenu">
+                <NavLink
+                  to="/system/users"
+                  className={({ isActive }) =>
+                    `nav-item nav-sub ${isActive ? "active" : ""}`
+                  }
+                >
+                  <span className="nav-label">Users</span>
+                </NavLink>
+                <NavLink
+                  to="/system/groups"
+                  className={({ isActive }) =>
+                    `nav-item nav-sub ${isActive ? "active" : ""}`
+                  }
+                >
+                  <span className="nav-label">Groups</span>
+                </NavLink>
+                <NavLink
+                  to="/system/roles"
+                  className={({ isActive }) =>
+                    `nav-item nav-sub ${isActive ? "active" : ""}`
+                  }
+                >
+                  <span className="nav-label">Roles</span>
+                </NavLink>
+              </div>
+            )}
+          </>
         )}
       </div>
     </>

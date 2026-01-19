@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { Icons } from "./Icons";
 import type { UserProfile } from "../hooks/useUsers";
 import type { Role } from "../types/Role";
 import type { Group } from "../types/Group";
@@ -40,6 +42,7 @@ export function UserTable({
   onUpdate,
   onDelete,
 }: UserTableProps) {
+  const { resendVerificationEmail } = useAuth();
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -60,6 +63,8 @@ export function UserTable({
   });
   const [saving, setSaving] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
+  const [resendingEmail, setResendingEmail] = useState<string | null>(null);
+  const [resendMessage, setResendMessage] = useState<string | null>(null);
 
   const handleAdd = async () => {
     if (!addFormData.email.trim()) {
@@ -166,6 +171,22 @@ export function UserTable({
     } catch {
       // Error handled in hook
     }
+  };
+
+  const handleResendVerification = async (email: string, userId: string) => {
+    setResendingEmail(userId);
+    setResendMessage(null);
+
+    const { error } = await resendVerificationEmail(email);
+
+    if (error) {
+      alert(`Failed to resend verification email: ${error.message}`);
+    } else {
+      setResendMessage(userId);
+      setTimeout(() => setResendMessage(null), 3000);
+    }
+
+    setResendingEmail(null);
   };
 
   const startEditing = (user: UserProfile) => {
@@ -511,16 +532,48 @@ export function UserTable({
                     <td>
                       <div className="action-buttons">
                         <button
-                          className="btn-edit"
+                          className="btn-icon btn-edit"
                           onClick={() => startEditing(user)}
+                          title="Edit user"
                         >
-                          Edit
+                          {Icons.edit}
+                          <span className="btn-tooltip">Edit</span>
                         </button>
+                        {!user.emailConfirmed &&
+                          (resendMessage === user.id ? (
+                            <span
+                              style={{
+                                fontSize: "0.75rem",
+                                color: "#10b981",
+                                padding: "0.25rem 0.5rem",
+                              }}
+                            >
+                              ✓ Sent
+                            </span>
+                          ) : (
+                            <button
+                              className="btn-icon btn-resend"
+                              onClick={() =>
+                                handleResendVerification(user.email, user.id)
+                              }
+                              disabled={resendingEmail === user.id}
+                              title="Resend verification email"
+                            >
+                              {Icons.mail}
+                              <span className="btn-tooltip">
+                                {resendingEmail === user.id
+                                  ? "Sending..."
+                                  : "Resend Email"}
+                              </span>
+                            </button>
+                          ))}
                         <button
-                          className="btn-delete"
+                          className="btn-icon btn-delete"
                           onClick={() => handleDelete(user.id)}
+                          title="Delete user"
                         >
-                          Delete
+                          {Icons.delete}
+                          <span className="btn-tooltip">Delete</span>
                         </button>
                       </div>
                     </td>

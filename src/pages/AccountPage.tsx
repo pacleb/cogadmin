@@ -5,7 +5,7 @@ import "./SettingsPage.css";
 import "./AccountPage.css";
 
 export function AccountPage() {
-  const { user } = useAuth();
+  const { user, resendVerificationEmail } = useAuth();
   const { profile, loading, saving, updateProfile } = useProfile();
   const [formData, setFormData] = useState({
     name: "",
@@ -13,6 +13,9 @@ export function AccountPage() {
     mobile: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [resendingEmail, setResendingEmail] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
+  const [resendError, setResendError] = useState("");
 
   useEffect(() => {
     if (profile) {
@@ -44,6 +47,32 @@ export function AccountPage() {
     setIsEditing(false);
   };
 
+  const handleResendVerification = async () => {
+    if (!user?.email) return;
+
+    setResendingEmail(true);
+    setResendMessage("");
+    setResendError("");
+
+    const { error } = await resendVerificationEmail(user.email);
+
+    if (error) {
+      setResendError(error.message || "Failed to resend verification email");
+    } else {
+      setResendMessage("Verification email sent! Please check your inbox.");
+    }
+
+    setResendingEmail(false);
+
+    // Clear messages after 5 seconds
+    setTimeout(() => {
+      setResendMessage("");
+      setResendError("");
+    }, 5000);
+  };
+
+  const isEmailConfirmed = user?.email_confirmed_at;
+
   return (
     <div className="settings-page">
       <header className="page-header">
@@ -72,9 +101,26 @@ export function AccountPage() {
           <div className="settings-card">
             <div className="setting-item">
               <label>Email</label>
-              <span className="setting-value setting-readonly">
-                {profile?.email || user?.email}
-              </span>
+              <div
+                style={{ display: "flex", gap: "1rem", alignItems: "center" }}
+              >
+                <span className="setting-value setting-readonly">
+                  {profile?.email || user?.email}
+                </span>
+                {!isEmailConfirmed && (
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      padding: "0.25rem 0.5rem",
+                      backgroundColor: "#fef3c7",
+                      color: "#92400e",
+                      borderRadius: "0.25rem",
+                    }}
+                  >
+                    Unconfirmed
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="setting-item">
@@ -156,6 +202,69 @@ export function AccountPage() {
               <label>User ID</label>
               <span className="setting-value setting-id">{user?.id}</span>
             </div>
+
+            {!isEmailConfirmed && (
+              <div
+                className="setting-item"
+                style={{
+                  marginTop: "1.5rem",
+                  paddingTop: "1rem",
+                  borderTop: "1px solid #e5e7eb",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <label>Email Verification</label>
+                    <p
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "#6b7280",
+                        marginTop: "0.5rem",
+                      }}
+                    >
+                      Your email hasn't been confirmed yet. Please check your
+                      inbox for a verification link.
+                    </p>
+                  </div>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleResendVerification}
+                    disabled={resendingEmail}
+                    style={{ whiteSpace: "nowrap", marginLeft: "1rem" }}
+                  >
+                    {resendingEmail ? "Sending..." : "Resend Email"}
+                  </button>
+                </div>
+                {resendMessage && (
+                  <p
+                    style={{
+                      fontSize: "0.875rem",
+                      color: "#10b981",
+                      marginTop: "0.5rem",
+                    }}
+                  >
+                    ✓ {resendMessage}
+                  </p>
+                )}
+                {resendError && (
+                  <p
+                    style={{
+                      fontSize: "0.875rem",
+                      color: "#ef4444",
+                      marginTop: "0.5rem",
+                    }}
+                  >
+                    ✕ {resendError}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </section>

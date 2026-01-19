@@ -12,6 +12,7 @@ export interface UserProfile {
   roleId: string | null;
   roleName: string;
   groupCode: string | null;
+  emailConfirmed: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +26,7 @@ interface ProfileRow {
   mobile: string;
   role_id: string | null;
   group_code: string | null;
+  email_confirmed: boolean;
   created_at: string;
   updated_at: string;
   roles?: { name: string } | null;
@@ -64,6 +66,7 @@ export function useUsers() {
         roleId: row.role_id,
         roleName: row.roles?.name || '',
         groupCode: row.group_code,
+        emailConfirmed: row.email_confirmed || false,
         createdAt: new Date(row.created_at),
         updatedAt: new Date(row.updated_at),
       }));
