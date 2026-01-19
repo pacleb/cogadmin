@@ -48,6 +48,7 @@ export type Database = {
           user_id: string;
           code: string;
           name: string;
+          weight: number;
           created_at: string;
           updated_at: string;
         };
@@ -56,6 +57,7 @@ export type Database = {
           user_id: string;
           code: string;
           name: string;
+          weight?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -64,6 +66,7 @@ export type Database = {
           user_id?: string;
           code?: string;
           name?: string;
+          weight?: number;
           created_at?: string;
           updated_at?: string;
         };

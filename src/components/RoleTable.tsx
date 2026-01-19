@@ -5,10 +5,14 @@ import "./RoleTable.css";
 interface RoleTableProps {
   roles: Role[];
   loading: boolean;
-  onAdd: (role: { code: string; name: string }) => Promise<void>;
+  onAdd: (role: {
+    code: string;
+    name: string;
+    weight?: number;
+  }) => Promise<void>;
   onUpdate: (
     id: string,
-    updates: { code?: string; name?: string },
+    updates: { code?: string; name?: string; weight?: number },
   ) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
@@ -22,7 +26,7 @@ export function RoleTable({
 }: RoleTableProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ code: "", name: "" });
+  const [formData, setFormData] = useState({ code: "", name: "", weight: 0 });
   const [saving, setSaving] = useState(false);
 
   const handleAdd = async () => {
@@ -30,8 +34,12 @@ export function RoleTable({
 
     try {
       setSaving(true);
-      await onAdd({ code: formData.code.trim(), name: formData.name.trim() });
-      setFormData({ code: "", name: "" });
+      await onAdd({
+        code: formData.code.trim(),
+        name: formData.name.trim(),
+        weight: formData.weight,
+      });
+      setFormData({ code: "", name: "", weight: 0 });
       setIsAdding(false);
     } catch {
       // Error handled in hook
@@ -48,9 +56,10 @@ export function RoleTable({
       await onUpdate(id, {
         code: formData.code.trim(),
         name: formData.name.trim(),
+        weight: formData.weight,
       });
       setEditingId(null);
-      setFormData({ code: "", name: "" });
+      setFormData({ code: "", name: "", weight: 0 });
     } catch {
       // Error handled in hook
     } finally {
@@ -70,14 +79,14 @@ export function RoleTable({
 
   const startEditing = (role: Role) => {
     setEditingId(role.id);
-    setFormData({ code: role.code, name: role.name });
+    setFormData({ code: role.code, name: role.name, weight: role.weight });
     setIsAdding(false);
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setIsAdding(false);
-    setFormData({ code: "", name: "" });
+    setFormData({ code: "", name: "", weight: 0 });
   };
 
   if (loading) {
@@ -98,7 +107,7 @@ export function RoleTable({
             className="btn-add-role"
             onClick={() => {
               setIsAdding(true);
-              setFormData({ code: "", name: "" });
+              setFormData({ code: "", name: "", weight: 0 });
             }}
           >
             + Add Role
@@ -109,6 +118,7 @@ export function RoleTable({
       <table className="role-table">
         <thead>
           <tr>
+            <th className="weight-col">Weight</th>
             <th>Code</th>
             <th>Name</th>
             <th>Actions</th>
@@ -119,13 +129,27 @@ export function RoleTable({
             <tr className="editing-row">
               <td>
                 <input
+                  type="number"
+                  value={formData.weight}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      weight: parseInt(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="0"
+                  className="weight-input"
+                  autoFocus
+                />
+              </td>
+              <td>
+                <input
                   type="text"
                   value={formData.code}
                   onChange={(e) =>
                     setFormData({ ...formData, code: e.target.value })
                   }
                   placeholder="Code"
-                  autoFocus
                 />
               </td>
               <td>
@@ -158,7 +182,7 @@ export function RoleTable({
           )}
           {roles.length === 0 && !isAdding ? (
             <tr>
-              <td colSpan={3} className="empty-message">
+              <td colSpan={4} className="empty-message">
                 No roles yet. Click "Add Role" to create one.
               </td>
             </tr>
@@ -169,12 +193,25 @@ export function RoleTable({
                   <>
                     <td>
                       <input
+                        type="number"
+                        value={formData.weight}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            weight: parseInt(e.target.value) || 0,
+                          })
+                        }
+                        className="weight-input"
+                        autoFocus
+                      />
+                    </td>
+                    <td>
+                      <input
                         type="text"
                         value={formData.code}
                         onChange={(e) =>
                           setFormData({ ...formData, code: e.target.value })
                         }
-                        autoFocus
                       />
                     </td>
                     <td>
@@ -207,6 +244,7 @@ export function RoleTable({
                   </>
                 ) : (
                   <>
+                    <td className="weight-cell">{role.weight}</td>
                     <td>{role.code}</td>
                     <td>{role.name}</td>
                     <td>

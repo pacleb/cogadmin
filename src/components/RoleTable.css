@@ -41,6 +41,17 @@
   border-collapse: collapse;
 }
 
+.role-table th.weight-col,
+.role-table td.weight-cell {
+  width: 70px;
+  text-align: center;
+}
+
+.role-table .weight-input {
+  width: 60px;
+  text-align: center;
+}
+
 .role-table th,
 .role-table td {
   padding: 0.625rem 1rem;

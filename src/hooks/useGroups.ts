@@ -8,6 +8,7 @@ const rowToGroup = (row: GroupRow): Group => ({
   id: row.id,
   code: row.code,
   name: row.name,
+  weight: row.weight ?? 0,
   createdAt: new Date(row.created_at),
   updatedAt: new Date(row.updated_at),
 });
@@ -30,6 +31,7 @@ export function useGroups() {
       const { data, error } = await supabase
         .from('groups')
         .select('*')
+        .order('weight', { ascending: true })
         .order('code', { ascending: true });
 
       if (error) throw error;
@@ -49,13 +51,14 @@ export function useGroups() {
   }, [fetchGroups]);
 
   const addGroup = useCallback(
-    async (group: { code: string; name: string }) => {
+    async (group: { code: string; name: string; weight?: number }) => {
       if (!user) return;
 
       try {
         const { error } = await supabase.from('groups').insert({
           code: group.code,
           name: group.name,
+          weight: group.weight ?? 0,
         });
 
         if (error) throw error;
@@ -70,7 +73,7 @@ export function useGroups() {
   );
 
   const updateGroup = useCallback(
-    async (id: string, updates: { code?: string; name?: string }) => {
+    async (id: string, updates: { code?: string; name?: string; weight?: number }) => {
       if (!user) return;
 
       try {
@@ -79,6 +82,7 @@ export function useGroups() {
           .update({
             ...(updates.code && { code: updates.code }),
             ...(updates.name && { name: updates.name }),
+            ...(updates.weight !== undefined && { weight: updates.weight }),
             updated_at: new Date().toISOString(),
           })
           .eq('id', id);

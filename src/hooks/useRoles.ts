@@ -3,10 +3,11 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import type { Role } from '../types/Role';
 
-const rowToRole = (row: { id: string; code: string; name: string; created_at: string; updated_at: string }): Role => ({
+const rowToRole = (row: { id: string; code: string; name: string; weight?: number; created_at: string; updated_at: string }): Role => ({
   id: row.id,
   code: row.code,
   name: row.name,
+  weight: row.weight ?? 0,
   createdAt: new Date(row.created_at),
   updatedAt: new Date(row.updated_at),
 });
@@ -29,6 +30,7 @@ export function useRoles() {
       const { data, error } = await supabase
         .from('roles')
         .select('*')
+        .order('weight', { ascending: true })
         .order('code', { ascending: true });
 
       if (error) throw error;
@@ -48,13 +50,14 @@ export function useRoles() {
   }, [fetchRoles]);
 
   const addRole = useCallback(
-    async (role: { code: string; name: string }) => {
+    async (role: { code: string; name: string; weight?: number }) => {
       if (!user) return;
 
       try {
         const { error } = await supabase.from('roles').insert({
           code: role.code,
           name: role.name,
+          weight: role.weight ?? 0,
         });
 
         if (error) throw error;
@@ -69,7 +72,7 @@ export function useRoles() {
   );
 
   const updateRole = useCallback(
-    async (id: string, updates: { code?: string; name?: string }) => {
+    async (id: string, updates: { code?: string; name?: string; weight?: number }) => {
       if (!user) return;
 
       try {
@@ -78,6 +81,7 @@ export function useRoles() {
           .update({
             ...(updates.code && { code: updates.code }),
             ...(updates.name && { name: updates.name }),
+            ...(updates.weight !== undefined && { weight: updates.weight }),
             updated_at: new Date().toISOString(),
           })
           .eq('id', id);

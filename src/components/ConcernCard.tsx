@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Concern, ConcernStatus } from "../types/Concern";
 import { ConcernForm } from "./ConcernForm";
+import { Icons } from "./Icons";
 import "./ConcernCard.css";
 
 interface ConcernCardProps {
@@ -13,10 +14,16 @@ interface ConcernCardProps {
   onStatusChange: (id: string, status: ConcernStatus) => void;
 }
 
+const priorityIcons = {
+  low: Icons.priorityLow,
+  medium: Icons.priorityMedium,
+  high: Icons.priorityHigh,
+};
+
 const priorityLabels = {
-  low: "🟢 Low",
-  medium: "🟡 Medium",
-  high: "🔴 High",
+  low: "Low",
+  medium: "Medium",
+  high: "High",
 };
 
 const statusLabels: Record<ConcernStatus, string> = {
@@ -57,6 +64,9 @@ export function ConcernCard({
       <div className="concern-header">
         <h3 className="concern-title">{concern.title}</h3>
         <span className={`priority-badge ${concern.priority}`}>
+          <span className="priority-icon">
+            {priorityIcons[concern.priority]}
+          </span>
           {priorityLabels[concern.priority]}
         </span>
       </div>
@@ -92,14 +102,14 @@ export function ConcernCard({
             onClick={() => setIsEditing(true)}
             aria-label="Edit concern"
           >
-            ✏️
+            {Icons.edit}
           </button>
           <button
             className="btn-icon delete"
             onClick={() => onDelete(concern.id)}
             aria-label="Delete concern"
           >
-            🗑️
+            {Icons.delete}
           </button>
         </div>
       </div>

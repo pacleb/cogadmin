@@ -38,12 +38,12 @@ CREATE POLICY "Allow authenticated users to delete roles"
   TO authenticated
   USING (true);
 
--- Insert roles
-INSERT INTO roles (code, name) VALUES ('SA', 'System Admin');
-INSERT INTO roles (code, name) VALUES ('AH', 'Admin Head');
-INSERT INTO roles (code, name) VALUES ('SH', 'Section Head');
-INSERT INTO roles (code, name) VALUES ('UH', 'Unit Head');
-INSERT INTO roles (code, name) VALUES ('CO', 'Coordinator');
-INSERT INTO roles (code, name) VALUES ('TL', 'Team Leader');
-INSERT INTO roles (code, name) VALUES ('ST', 'Staff');
-INSERT INTO roles (code, name) VALUES ('GU', 'Guest');
+-- Insert roles with weight for ordering
+INSERT INTO roles (code, name, weight) VALUES ('SA', 'System Admin', 1);
+INSERT INTO roles (code, name, weight) VALUES ('AH', 'Admin Head', 2);
+INSERT INTO roles (code, name, weight) VALUES ('SH', 'Section Head', 3);
+INSERT INTO roles (code, name, weight) VALUES ('UH', 'Unit Head', 4);
+INSERT INTO roles (code, name, weight) VALUES ('CO', 'Coordinator', 5);
+INSERT INTO roles (code, name, weight) VALUES ('TL', 'Team Leader', 6);
+INSERT INTO roles (code, name, weight) VALUES ('ST', 'Staff', 7);
+INSERT INTO roles (code, name, weight) VALUES ('GU', 'Guest', 8);

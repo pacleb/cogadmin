@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "./Sidebar.css";
@@ -100,120 +101,264 @@ const Icons = {
       <line x1="12" y1="17" x2="12" y2="21" />
     </svg>
   ),
+  menu: (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  ),
+  close: (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  ),
+  chevron: (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  ),
 };
 
 export function Sidebar() {
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+
   const isSettingsActive = location.pathname.startsWith("/settings");
   const isSystemActive = location.pathname.startsWith("/system");
 
-  return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <h1 className="sidebar-logo">Admin</h1>
-      </div>
+  // Auto-expand active menus
+  useEffect(() => {
+    const expanded: string[] = [];
+    if (isSettingsActive) expanded.push("settings");
+    if (isSystemActive) expanded.push("system");
+    setExpandedMenus(expanded);
+  }, [isSettingsActive, isSystemActive]);
 
-      <nav className="sidebar-nav">
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
-        >
-          <span className="nav-icon">{Icons.dashboard}</span>
-          <span className="nav-label">Dashboard</span>
-        </NavLink>
-        <NavLink
-          to="/concerns"
-          className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
-        >
-          <span className="nav-icon">{Icons.concerns}</span>
-          <span className="nav-label">Concerns</span>
-        </NavLink>
-        <NavLink
-          to="/reports"
-          className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
-        >
-          <span className="nav-icon">{Icons.reports}</span>
-          <span className="nav-label">Reports</span>
-        </NavLink>
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
-        <div className={`nav-group ${isSettingsActive ? "expanded" : ""}`}>
-          <NavLink
-            to="/settings/account"
-            className={() =>
-              `nav-item nav-parent ${isSettingsActive ? "active" : ""}`
-            }
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  const toggleMenu = (menu: string) => {
+    setExpandedMenus((prev) =>
+      prev.includes(menu) ? prev.filter((m) => m !== menu) : [...prev, menu],
+    );
+  };
+
+  const isMenuExpanded = (menu: string) => expandedMenus.includes(menu);
+
+  const renderNavContent = () => (
+    <>
+      <NavLink
+        to="/"
+        end
+        className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+      >
+        <span className="nav-icon">{Icons.dashboard}</span>
+        <span className="nav-label">Dashboard</span>
+      </NavLink>
+      <NavLink
+        to="/concerns"
+        className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+      >
+        <span className="nav-icon">{Icons.concerns}</span>
+        <span className="nav-label">Concerns</span>
+      </NavLink>
+      <NavLink
+        to="/reports"
+        className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+      >
+        <span className="nav-icon">{Icons.reports}</span>
+        <span className="nav-label">Reports</span>
+      </NavLink>
+
+      <div
+        className={`nav-group ${isMenuExpanded("settings") ? "expanded" : ""}`}
+      >
+        <button
+          type="button"
+          className={`nav-item nav-parent ${isSettingsActive ? "active" : ""}`}
+          onClick={() => toggleMenu("settings")}
+        >
+          <span className="nav-icon">{Icons.settings}</span>
+          <span className="nav-label">Settings</span>
+          <span
+            className={`nav-chevron ${isMenuExpanded("settings") ? "rotated" : ""}`}
           >
-            <span className="nav-icon">{Icons.settings}</span>
-            <span className="nav-label">Settings</span>
-          </NavLink>
-
-          {isSettingsActive && (
-            <div className="nav-submenu">
-              <NavLink
-                to="/settings/account"
-                className={({ isActive }) =>
-                  `nav-item nav-sub ${isActive ? "active" : ""}`
-                }
-              >
-                <span className="nav-label">Account</span>
-              </NavLink>
-            </div>
-          )}
-        </div>
-
-        <div className={`nav-group ${isSystemActive ? "expanded" : ""}`}>
-          <NavLink
-            to="/system/users"
-            className={() =>
-              `nav-item nav-parent ${isSystemActive ? "active" : ""}`
-            }
-          >
-            <span className="nav-icon">{Icons.system}</span>
-            <span className="nav-label">System</span>
-          </NavLink>
-
-          {isSystemActive && (
-            <div className="nav-submenu">
-              <NavLink
-                to="/system/users"
-                className={({ isActive }) =>
-                  `nav-item nav-sub ${isActive ? "active" : ""}`
-                }
-              >
-                <span className="nav-label">Users</span>
-              </NavLink>
-              <NavLink
-                to="/system/groups"
-                className={({ isActive }) =>
-                  `nav-item nav-sub ${isActive ? "active" : ""}`
-                }
-              >
-                <span className="nav-label">Groups</span>
-              </NavLink>
-              <NavLink
-                to="/system/roles"
-                className={({ isActive }) =>
-                  `nav-item nav-sub ${isActive ? "active" : ""}`
-                }
-              >
-                <span className="nav-label">Roles</span>
-              </NavLink>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      <div className="sidebar-footer">
-        <div className="user-info">
-          <span className="user-avatar">{Icons.user}</span>
-          <span className="user-email">{user?.email}</span>
-        </div>
-        <button className="sign-out-btn" onClick={signOut}>
-          Sign Out
+            {Icons.chevron}
+          </span>
         </button>
+
+        {isMenuExpanded("settings") && (
+          <div className="nav-submenu">
+            <NavLink
+              to="/settings/account"
+              className={({ isActive }) =>
+                `nav-item nav-sub ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-label">Account</span>
+            </NavLink>
+          </div>
+        )}
       </div>
-    </aside>
+
+      <div
+        className={`nav-group ${isMenuExpanded("system") ? "expanded" : ""}`}
+      >
+        <button
+          type="button"
+          className={`nav-item nav-parent ${isSystemActive ? "active" : ""}`}
+          onClick={() => toggleMenu("system")}
+        >
+          <span className="nav-icon">{Icons.system}</span>
+          <span className="nav-label">System</span>
+          <span
+            className={`nav-chevron ${isMenuExpanded("system") ? "rotated" : ""}`}
+          >
+            {Icons.chevron}
+          </span>
+        </button>
+
+        {isMenuExpanded("system") && (
+          <div className="nav-submenu">
+            <NavLink
+              to="/system/users"
+              className={({ isActive }) =>
+                `nav-item nav-sub ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-label">Users</span>
+            </NavLink>
+            <NavLink
+              to="/system/groups"
+              className={({ isActive }) =>
+                `nav-item nav-sub ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-label">Groups</span>
+            </NavLink>
+            <NavLink
+              to="/system/roles"
+              className={({ isActive }) =>
+                `nav-item nav-sub ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-label">Roles</span>
+            </NavLink>
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Header */}
+      <header className="mobile-header">
+        <h1 className="mobile-logo">Admin</h1>
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open menu"
+        >
+          {Icons.menu}
+        </button>
+      </header>
+
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="mobile-overlay"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Drawer */}
+      <aside className={`mobile-drawer ${mobileMenuOpen ? "open" : ""}`}>
+        <div className="mobile-drawer-header">
+          <h1 className="sidebar-logo">Admin</h1>
+          <button
+            className="mobile-close-btn"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            {Icons.close}
+          </button>
+        </div>
+        <nav className="sidebar-nav">{renderNavContent()}</nav>
+        <div className="sidebar-footer">
+          <div className="user-info">
+            <span className="user-avatar">{Icons.user}</span>
+            <span className="user-email">{user?.email}</span>
+          </div>
+          <button className="sign-out-btn" onClick={signOut}>
+            Sign Out
+          </button>
+        </div>
+      </aside>
+
+      {/* Desktop Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <h1 className="sidebar-logo">Admin</h1>
+        </div>
+
+        <nav className="sidebar-nav">{renderNavContent()}</nav>
+
+        <div className="sidebar-footer">
+          <div className="user-info">
+            <span className="user-avatar">{Icons.user}</span>
+            <span className="user-email">{user?.email}</span>
+          </div>
+          <button className="sign-out-btn" onClick={signOut}>
+            Sign Out
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

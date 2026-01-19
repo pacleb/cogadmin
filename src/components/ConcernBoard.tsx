@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Concern, ConcernStatus } from "../types/Concern";
 import { ConcernList } from "./ConcernList";
 import { ConcernForm } from "./ConcernForm";
+import { Icons } from "./Icons";
 import "./ConcernBoard.css";
 
 interface ConcernBoardProps {
@@ -44,12 +45,25 @@ export function ConcernBoard({
   return (
     <div className="concern-board">
       <div className="board-header">
-        <h1 className="board-title">📋 Admin Concerns</h1>
+        <h1 className="board-title">
+          <span className="board-icon">{Icons.concerns}</span>
+          Admin Concerns
+        </h1>
         <button
           className="btn btn-primary add-concern-btn"
           onClick={() => setShowForm(!showForm)}
         >
-          {showForm ? "✕ Cancel" : "+ Add Concern"}
+          {showForm ? (
+            <>
+              <span className="btn-icon">{Icons.close}</span>
+              Cancel
+            </>
+          ) : (
+            <>
+              <span className="btn-icon">{Icons.plus}</span>
+              Add Concern
+            </>
+          )}
         </button>
       </div>
 

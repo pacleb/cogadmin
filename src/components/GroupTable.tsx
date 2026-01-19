@@ -5,10 +5,14 @@ import "./GroupTable.css";
 interface GroupTableProps {
   groups: Group[];
   loading: boolean;
-  onAdd: (group: { code: string; name: string }) => Promise<void>;
+  onAdd: (group: {
+    code: string;
+    name: string;
+    weight?: number;
+  }) => Promise<void>;
   onUpdate: (
     id: string,
-    updates: { code?: string; name?: string },
+    updates: { code?: string; name?: string; weight?: number },
   ) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
 }
@@ -22,7 +26,7 @@ export function GroupTable({
 }: GroupTableProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ code: "", name: "" });
+  const [formData, setFormData] = useState({ code: "", name: "", weight: 0 });
   const [saving, setSaving] = useState(false);
 
   const handleAdd = async () => {
@@ -30,8 +34,12 @@ export function GroupTable({
 
     try {
       setSaving(true);
-      await onAdd({ code: formData.code.trim(), name: formData.name.trim() });
-      setFormData({ code: "", name: "" });
+      await onAdd({
+        code: formData.code.trim(),
+        name: formData.name.trim(),
+        weight: formData.weight,
+      });
+      setFormData({ code: "", name: "", weight: 0 });
       setIsAdding(false);
     } catch {
       // Error handled in hook
@@ -48,9 +56,10 @@ export function GroupTable({
       await onUpdate(id, {
         code: formData.code.trim(),
         name: formData.name.trim(),
+        weight: formData.weight,
       });
       setEditingId(null);
-      setFormData({ code: "", name: "" });
+      setFormData({ code: "", name: "", weight: 0 });
     } catch {
       // Error handled in hook
     } finally {
@@ -70,14 +79,14 @@ export function GroupTable({
 
   const startEditing = (group: Group) => {
     setEditingId(group.id);
-    setFormData({ code: group.code, name: group.name });
+    setFormData({ code: group.code, name: group.name, weight: group.weight });
     setIsAdding(false);
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setIsAdding(false);
-    setFormData({ code: "", name: "" });
+    setFormData({ code: "", name: "", weight: 0 });
   };
 
   if (loading) {
@@ -98,7 +107,7 @@ export function GroupTable({
             className="btn-add-group"
             onClick={() => {
               setIsAdding(true);
-              setFormData({ code: "", name: "" });
+              setFormData({ code: "", name: "", weight: 0 });
             }}
           >
             + Add Group
@@ -109,6 +118,7 @@ export function GroupTable({
       <table className="group-table">
         <thead>
           <tr>
+            <th className="weight-col">Weight</th>
             <th>Code</th>
             <th>Name</th>
             <th>Actions</th>
@@ -119,13 +129,27 @@ export function GroupTable({
             <tr className="editing-row">
               <td>
                 <input
+                  type="number"
+                  value={formData.weight}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      weight: parseInt(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="0"
+                  className="weight-input"
+                  autoFocus
+                />
+              </td>
+              <td>
+                <input
                   type="text"
                   value={formData.code}
                   onChange={(e) =>
                     setFormData({ ...formData, code: e.target.value })
                   }
                   placeholder="Code"
-                  autoFocus
                 />
               </td>
               <td>
@@ -158,7 +182,7 @@ export function GroupTable({
           )}
           {groups.length === 0 && !isAdding ? (
             <tr>
-              <td colSpan={3} className="empty-message">
+              <td colSpan={4} className="empty-message">
                 No groups yet. Click "Add Group" to create one.
               </td>
             </tr>
@@ -169,12 +193,25 @@ export function GroupTable({
                   <>
                     <td>
                       <input
+                        type="number"
+                        value={formData.weight}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            weight: parseInt(e.target.value) || 0,
+                          })
+                        }
+                        className="weight-input"
+                        autoFocus
+                      />
+                    </td>
+                    <td>
+                      <input
                         type="text"
                         value={formData.code}
                         onChange={(e) =>
                           setFormData({ ...formData, code: e.target.value })
                         }
-                        autoFocus
                       />
                     </td>
                     <td>
@@ -207,6 +244,7 @@ export function GroupTable({
                   </>
                 ) : (
                   <>
+                    <td className="weight-cell">{group.weight}</td>
                     <td>{group.code}</td>
                     <td>{group.name}</td>
                     <td>

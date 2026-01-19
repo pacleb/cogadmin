@@ -1,3 +1,4 @@
+import { Icons } from "../components/Icons";
 import "./ReportsPage.css";
 
 export function ReportsPage() {
@@ -9,7 +10,7 @@ export function ReportsPage() {
       </header>
 
       <div className="coming-soon">
-        <span className="coming-soon-icon">📊</span>
+        <span className="coming-soon-icon">{Icons.chart}</span>
         <h2>Coming Soon</h2>
         <p>Reports and analytics features are under development.</p>
       </div>

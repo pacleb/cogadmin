@@ -41,6 +41,17 @@
   border-collapse: collapse;
 }
 
+.group-table th.weight-col,
+.group-table td.weight-cell {
+  width: 70px;
+  text-align: center;
+}
+
+.group-table .weight-input {
+  width: 60px;
+  text-align: center;
+}
+
 .group-table th,
 .group-table td {
   padding: 0.75rem 1rem;

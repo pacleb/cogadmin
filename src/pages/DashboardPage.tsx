@@ -1,4 +1,5 @@
 import { useConcerns } from "../hooks/useConcernsSupabase";
+import { Icons } from "../components/Icons";
 import "./DashboardPage.css";
 
 export function DashboardPage() {
@@ -31,7 +32,7 @@ export function DashboardPage() {
 
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon">📋</div>
+          <div className="stat-icon">{Icons.clipboard}</div>
           <div className="stat-content">
             <span className="stat-value">{concerns.length}</span>
             <span className="stat-label">Total Concerns</span>
@@ -39,7 +40,7 @@ export function DashboardPage() {
         </div>
 
         <div className="stat-card todo">
-          <div className="stat-icon">📝</div>
+          <div className="stat-icon">{Icons.todo}</div>
           <div className="stat-content">
             <span className="stat-value">{todoCount}</span>
             <span className="stat-label">To Do</span>
@@ -47,7 +48,7 @@ export function DashboardPage() {
         </div>
 
         <div className="stat-card in-progress">
-          <div className="stat-icon">🔄</div>
+          <div className="stat-icon">{Icons.inProgress}</div>
           <div className="stat-content">
             <span className="stat-value">{inProgressCount}</span>
             <span className="stat-label">In Progress</span>
@@ -55,7 +56,7 @@ export function DashboardPage() {
         </div>
 
         <div className="stat-card done">
-          <div className="stat-icon">✅</div>
+          <div className="stat-icon">{Icons.done}</div>
           <div className="stat-content">
             <span className="stat-value">{doneCount}</span>
             <span className="stat-label">Done</span>
@@ -63,7 +64,7 @@ export function DashboardPage() {
         </div>
 
         <div className="stat-card high-priority">
-          <div className="stat-icon">🔴</div>
+          <div className="stat-icon">{Icons.highPriority}</div>
           <div className="stat-content">
             <span className="stat-value">{highPriorityCount}</span>
             <span className="stat-label">High Priority</span>
