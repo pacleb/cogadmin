@@ -128,35 +128,39 @@ export function ConcernList({
         </thead>
         <tbody>
           {sortedConcerns.map((concern) => {
-            const isHighlighted = ['For Update', 'For Report', 'For Approval'].includes(concern.status);
+            const isHighlighted = [
+              "For Update",
+              "For Report",
+              "For Approval",
+            ].includes(concern.status);
             return (
               <tr
                 key={concern.id}
-                className={`concern-row urgency-${concern.urgency.toLowerCase().replace(" ", "-")}${isHighlighted ? ' highlighted-status' : ''}`}
+                className={`concern-row urgency-${concern.urgency.toLowerCase().replace(" ", "-")}${isHighlighted ? " highlighted-status" : ""}`}
                 onClick={() => setEditingId(concern.id)}
                 style={{ cursor: "pointer" }}
               >
-              <td className="group-cell">
-                <span className="group-badge">{concern.groupCode}</span>
-              </td>
-              <td className="urgency-cell">
-                <span
-                  className={`urgency-badge urgency-badge-${concern.urgency.toLowerCase().replace(" ", "-")}`}
-                >
-                  {URGENCY_LABELS[concern.urgency]}
-                </span>
-              </td>
-              <td className="task-cell">{concern.task}</td>
-              <td className="remarks-cell">{concern.remarks || "-"}</td>
-              <td className="pic-cell">{concern.pic || "-"}</td>
-              <td className="status-cell">
-                <span className="status-badge">{concern.status}</span>
-              </td>
-              <td className="detailed-status-cell">
-                {concern.detailedStatus || "-"}
-              </td>
-              <td className="date-cell">{formatDate(concern.startDate)}</td>
-              <td className="date-cell">{formatDate(concern.endDate)}</td>
+                <td className="group-cell">
+                  <span className="group-badge">{concern.groupCode}</span>
+                </td>
+                <td className="urgency-cell">
+                  <span
+                    className={`urgency-badge urgency-badge-${concern.urgency.toLowerCase().replace(" ", "-")}`}
+                  >
+                    {URGENCY_LABELS[concern.urgency]}
+                  </span>
+                </td>
+                <td className="task-cell">{concern.task}</td>
+                <td className="remarks-cell">{concern.remarks || "-"}</td>
+                <td className="pic-cell">{concern.pic || "-"}</td>
+                <td className="status-cell">
+                  <span className="status-badge">{concern.status}</span>
+                </td>
+                <td className="detailed-status-cell">
+                  {concern.detailedStatus || "-"}
+                </td>
+                <td className="date-cell">{formatDate(concern.startDate)}</td>
+                <td className="date-cell">{formatDate(concern.endDate)}</td>
               </tr>
             );
           })}

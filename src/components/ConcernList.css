@@ -80,9 +80,11 @@
 .urgency-badge {
   display: inline-block;
   padding: 0.2rem 0.4rem;
-  border-radius: 3px;
+  border-radius: 9999px;
   font-size: 0.7rem;
   font-weight: 600;
+  width: 110px;
+  text-align: center;
 }
 
 .urgency-badge-emergency {
@@ -142,6 +144,7 @@
 .status-badge {
   display: inline-block;
   padding: 0.2rem 0.4rem;
+  border-radius: 9999px;
   color: #6b7280;
   font-size: 0.75rem;
   font-weight: 400;
