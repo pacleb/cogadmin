@@ -3,7 +3,6 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Layout } from "./components/Layout";
 import { AuthPage } from "./pages/AuthPage";
 import { DashboardPage } from "./pages/DashboardPage";
-import { ConcernsPage } from "./pages/ConcernsPage";
 import { ConcernsAssignedToMePage } from "./pages/ConcernsAssignedToMePage";
 import { ConcernsAssignedToGroupPage } from "./pages/ConcernsAssignedToGroupPage";
 import { ReportsPage } from "./pages/ReportsPage";

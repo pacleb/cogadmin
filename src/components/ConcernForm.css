@@ -67,6 +67,7 @@
   display: flex;
   gap: 0.5rem;
   margin-top: 0.25rem;
+  align-items: center;
 }
 
 .btn {
@@ -96,6 +97,18 @@
 
 .btn-secondary:hover {
   background: var(--secondary-hover);
+}
+
+.btn-delete {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+.btn-delete:hover {
+  background: #b91c1c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -131,18 +144,18 @@
   background: #f4f4f5;
 }
 
-/* EMERGENCY: Dark Gray background, White font */
+/* EMERGENCY: Dark Red background, White font */
 .urgency-toggle.urgency-emergency.active {
-  background: #374151;
+  background: #991b1b;
   color: #ffffff;
-  border-color: #374151;
+  border-color: #991b1b;
 }
 
-/* Major Urgent: Dark Red background, White font */
+/* Major Urgent: Dark Orange background, White font */
 .urgency-toggle.urgency-major-urgent.active {
-  background: #b91c1c;
+  background: #ea580c;
   color: #ffffff;
-  border-color: #b91c1c;
+  border-color: #ea580c;
 }
 
 /* Urgent: Light Orange background, Dark Red font */

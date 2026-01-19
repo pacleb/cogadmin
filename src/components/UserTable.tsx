@@ -171,7 +171,6 @@ export function UserTable({
   const startEditing = (user: UserProfile) => {
     setEditingId(user.id);
     setFormData({
-      email: user.email,
       name: user.name,
       nickname: user.nickname,
       mobile: user.mobile,
@@ -229,6 +228,7 @@ export function UserTable({
                   nickname: "",
                   mobile: "",
                   role_id: null,
+                  group_code: null,
                 });
                 setAddError(null);
               }}
@@ -400,13 +400,9 @@ export function UserTable({
                     <td>
                       <input
                         type="email"
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
+                        value={user.email}
                         placeholder="Email"
-                        required
-                        autoFocus
+                        disabled
                       />
                     </td>
                     <td>

@@ -11,6 +11,7 @@ interface ProfileRow {
   nickname: string;
   mobile: string;
   role_id: string | null;
+  group_code: string | null;
   created_at: string;
   updated_at: string;
   roles?: { name: string } | null;
@@ -25,6 +26,7 @@ const rowToProfile = (row: ProfileRow): Profile => ({
   mobile: row.mobile || '',
   roleId: row.role_id,
   roleName: row.roles?.name || '',
+  groupCode: row.group_code,
   createdAt: new Date(row.created_at),
   updatedAt: new Date(row.updated_at),
 });

@@ -33,7 +33,6 @@ export function ConcernsAssignedToGroupPage() {
         onDeleteConcern={deleteConcern}
         onStatusChange={updateConcernStatus}
         title="Assigned to My Group"
-        subtitle="Concerns assigned to your group"
       />
     </div>
   );

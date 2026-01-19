@@ -2,7 +2,6 @@ import { useState } from "react";
 import type { Concern, ConcernStatus, ConcernUrgency } from "../types/Concern";
 import { URGENCY_LABELS } from "../types/Concern";
 import { ConcernForm } from "./ConcernForm";
-import { Icons } from "./Icons";
 import { formatDate } from "../lib/formatDate";
 import "./ConcernList.css";
 
@@ -12,15 +11,15 @@ interface ConcernListProps {
     id: string,
     updates: Partial<Omit<Concern, "id" | "createdAt">>,
   ) => void;
-  onDelete: (id: string) => void;
-  onStatusChange: (id: string, status: ConcernStatus) => void;
+  _onDelete: (id: string) => void;
+  _onStatusChange: (id: string, status: ConcernStatus) => void;
 }
 
 export function ConcernList({
   concerns,
   onUpdate,
-  onDelete,
-  onStatusChange,
+  _onDelete,
+  _onStatusChange,
 }: ConcernListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -106,6 +105,7 @@ export function ConcernList({
             initialValues={concern}
             onSubmit={handleUpdate}
             onCancel={() => setEditingId(null)}
+            onDelete={onDelete}
           />
         </div>
       );

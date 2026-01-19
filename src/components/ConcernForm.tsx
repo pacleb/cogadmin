@@ -6,6 +6,7 @@ import {
   STATUS_OPTIONS,
 } from "../types/Concern";
 import { supabase } from "../lib/supabase";
+import { useAuth } from "../contexts/AuthContext";
 import { DateTimePicker } from "./DateTimePicker";
 import "./ConcernForm.css";
 
@@ -45,16 +46,23 @@ interface ConcernFormProps {
     concern: Omit<Concern, "id" | "createdAt" | "updatedAt" | "endDate">,
   ) => void;
   onCancel?: () => void;
+  onDelete?: (id: string) => void;
   initialValues?: Partial<Concern>;
 }
 
 export function ConcernForm({
   onSubmit,
   onCancel,
+  onDelete,
   initialValues,
 }: ConcernFormProps) {
+  const { user } = useAuth();
   const [groups, setGroups] = useState<Group[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [currentUserProfile, setCurrentUserProfile] = useState<{
+    group_code: string | null;
+    nickname: string;
+  } | null>(null);
   const [groupCode, setGroupCode] = useState(initialValues?.groupCode ?? "");
   const [urgency, setUrgency] = useState<ConcernUrgency>(
     initialValues?.urgency ?? "Normal",
@@ -85,28 +93,48 @@ export function ConcernForm({
     }
   }, [status, requiresDetailedStatus]);
 
-  // Fetch groups and profiles for dropdowns
+  // Fetch groups and profiles for dropdowns, and current user's profile
   useEffect(() => {
     const fetchData = async () => {
-      const [groupsResult, profilesResult] = await Promise.all([
-        supabase
-          .from("groups")
-          .select("code, name")
-          .order("weight", { ascending: true }),
-        supabase
-          .from("profiles")
-          .select("nickname")
-          .order("nickname", { ascending: true }),
-      ]);
+      const [groupsResult, profilesResult, currentUserResult] =
+        await Promise.all([
+          supabase
+            .from("groups")
+            .select("code, name")
+            .order("weight", { ascending: true }),
+          supabase
+            .from("profiles")
+            .select("nickname")
+            .order("nickname", { ascending: true }),
+          user
+            ? supabase
+                .from("profiles")
+                .select("group_code, nickname")
+                .eq("user_id", user.id)
+                .single()
+            : Promise.resolve({ data: null, error: null }),
+        ]);
 
       if (groupsResult.data) setGroups(groupsResult.data);
       if (profilesResult.data) {
         // Filter out empty nicknames
         setProfiles(profilesResult.data.filter((p) => p.nickname));
       }
+      if (currentUserResult.data) {
+        setCurrentUserProfile(currentUserResult.data);
+        // Set defaults only if this is a new concern (no initialValues)
+        if (!initialValues) {
+          if (currentUserResult.data.group_code) {
+            setGroupCode(currentUserResult.data.group_code);
+          }
+          if (currentUserResult.data.nickname) {
+            setPic(currentUserResult.data.nickname);
+          }
+        }
+      }
     };
     fetchData();
-  }, []);
+  }, [user, initialValues]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -290,6 +318,15 @@ export function ConcernForm({
             onClick={onCancel}
           >
             Cancel
+          </button>
+        )}
+        {initialValues?.id && onDelete && (
+          <button
+            type="button"
+            className="btn btn-delete"
+            onClick={() => onDelete(initialValues.id as string)}
+          >
+            Delete
           </button>
         )}
       </div>

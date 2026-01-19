@@ -33,7 +33,6 @@ export function ConcernsAssignedToMePage() {
         onDeleteConcern={deleteConcern}
         onStatusChange={updateConcernStatus}
         title="Assigned to Me"
-        subtitle="Concerns assigned to you"
       />
     </div>
   );

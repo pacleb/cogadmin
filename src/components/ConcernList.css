@@ -78,12 +78,12 @@
 }
 
 .urgency-badge-emergency {
-  background-color: #374151;
+  background-color: #991b1b;
   color: white;
 }
 
 .urgency-badge-major-urgent {
-  background-color: #b91c1c;
+  background-color: #ea580c;
   color: white;
 }
 
