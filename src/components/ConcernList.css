@@ -27,14 +27,15 @@
   font-size: 0.75rem;
 }
 
-/* Center align headers for Group, Urgency, PIC, Status, Detailed Status, Start Date, End Date */
+/* Center align headers for Group, Urgency, PIC, Status, To, Detailed Status, Start Date, End Date */
 .concern-table th:nth-child(1),
 .concern-table th:nth-child(2),
 .concern-table th:nth-child(5),
 .concern-table th:nth-child(6),
 .concern-table th:nth-child(7),
 .concern-table th:nth-child(8),
-.concern-table th:nth-child(9) {
+.concern-table th:nth-child(9),
+.concern-table th:nth-child(10) {
   text-align: center;
 }
 
@@ -75,6 +76,17 @@
 .urgency-cell {
   white-space: nowrap;
   text-align: center;
+}
+
+.pic-cell {
+  text-align: center;
+}
+
+.to-cell {
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: #6b7280;
 }
 
 .urgency-badge {

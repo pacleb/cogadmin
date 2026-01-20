@@ -33,6 +33,7 @@ export type Database = {
           status: ConcernStatusDB;
           detailed_status: string | null;
           pic: string | null;
+          to: string | null;
           end_date: string | null;
           created_at: string;
           updated_at: string;
@@ -48,6 +49,7 @@ export type Database = {
           status?: ConcernStatusDB;
           detailed_status?: string | null;
           pic?: string | null;
+          to?: string | null;
           end_date?: string | null;
           created_at?: string;
           updated_at?: string;

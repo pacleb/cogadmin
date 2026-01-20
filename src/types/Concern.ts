@@ -26,6 +26,7 @@ export interface Concern {
   status: ConcernStatus;
   detailedStatus: string;
   pic: string;                 // Person in Charge - Profiles.Nickname
+  to: string;                  // Delegated/Download to - Profiles.Nickname (required for "For Delegating" or "For Download")
   endDate: Date | null;        // Auto-filled when status = 'Accomplished', cleared otherwise
   createdAt: Date;
   updatedAt: Date;

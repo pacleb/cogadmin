@@ -121,6 +121,7 @@ export function ConcernList({
             <th>Remarks</th>
             <th>PIC</th>
             <th>Status</th>
+            <th>To</th>
             <th>Detailed Status</th>
             <th>Start Date</th>
             <th>End Date</th>
@@ -156,6 +157,7 @@ export function ConcernList({
                 <td className="status-cell">
                   <span className="status-badge">{concern.status}</span>
                 </td>
+                <td className="to-cell">{concern.to || "-"}</td>
                 <td className="detailed-status-cell">
                   {concern.detailedStatus || "-"}
                 </td>

@@ -15,6 +15,7 @@ const rowToConcern = (row: ConcernRow): Concern => ({
   status: row.status,
   detailedStatus: row.detailed_status || '',
   pic: row.pic || '',
+  to: row.to || '',
   endDate: row.end_date ? new Date(row.end_date) : null,
   createdAt: new Date(row.created_at),
   updatedAt: new Date(row.updated_at),
@@ -127,6 +128,7 @@ export function useConcerns() {
         if (updates.status !== undefined) updateData.status = updates.status;
         if (updates.detailedStatus !== undefined) updateData.detailed_status = updates.detailedStatus;
         if (updates.pic !== undefined) updateData.pic = updates.pic;
+        if (updates.to !== undefined) updateData.to = updates.to;
         
         // Auto-reassign PIC to Admin Head for specific statuses
         if (updates.status && ['New', 'For Delegating', 'For Download', 'For Update', 'For Report', 'For Approval'].includes(updates.status)) {

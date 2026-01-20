@@ -77,17 +77,25 @@ export function ConcernForm({
     initialValues?.detailedStatus ?? "",
   );
   const [pic, setPic] = useState(initialValues?.pic ?? "");
+  const [to, setTo] = useState(initialValues?.to ?? "");
 
   // Check if detailed status is required
   const requiresDetailedStatus = status === "Preparing" || status === "Ongoing";
   const detailedStatusOptions = DETAILED_STATUS_OPTIONS[status] || [];
+
+  // Check if 'to' field is required
+  const requiresTo = status === "For Delegating" || status === "For Download";
 
   // Clear detailed status when status changes to one that doesn't need it
   useEffect(() => {
     if (!requiresDetailedStatus) {
       setDetailedStatus("");
     }
-  }, [status, requiresDetailedStatus]);
+    // Clear 'to' field when status changes to one that doesn't need it
+    if (!requiresTo) {
+      setTo("");
+    }
+  }, [status, requiresDetailedStatus, requiresTo]);
 
   // Fetch groups and profiles for dropdowns, and current user's profile
   useEffect(() => {
@@ -135,6 +143,7 @@ export function ConcernForm({
     if (!status) return; // Status is required
     if (!startDate) return; // Start Date is required
     if (requiresDetailedStatus && !detailedStatus) return;
+    if (requiresTo && !to) return; // 'to' is required for delegating/download
 
     onSubmit({
       groupCode,
@@ -145,6 +154,7 @@ export function ConcernForm({
       status,
       detailedStatus: detailedStatus.trim(),
       pic,
+      to: to.trim(),
     });
 
     if (!initialValues) {
@@ -156,6 +166,7 @@ export function ConcernForm({
       setStatus("New");
       setDetailedStatus("");
       setPic("");
+      setTo("");
     }
   };
 
@@ -255,6 +266,25 @@ export function ConcernForm({
             ))}
           </select>
         </div>
+
+        {requiresTo && (
+          <div className="form-group">
+            <label htmlFor="to">To *</label>
+            <select
+              id="to"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              required={requiresTo}
+            >
+              <option value="">Select Person</option>
+              {profiles.map((profile) => (
+                <option key={profile.nickname} value={profile.nickname}>
+                  {profile.nickname}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="form-group">
           <label htmlFor="detailedStatus">
