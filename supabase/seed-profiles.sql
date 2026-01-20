@@ -96,4 +96,3 @@ INSERT INTO profiles (user_id, email, name, nickname, mobile)
 SELECT id, email, '', '', ''
 FROM auth.users
 WHERE id NOT IN (SELECT user_id FROM profiles);
-WHERE id NOT IN (SELECT user_id FROM profiles);
